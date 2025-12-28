@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "697320518978",
+    "project_id": "ecommerceapp-e3997",
+    "storage_bucket": "ecommerceapp-e3997.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:697320518978:android:221e429b8b764c2dba84db",
+        "android_client_info": {
+          "package_name": "com.example.ecommerceapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3v8Ie-a8CfZWeogpjla_7lFjaBztD3O4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:697320518978:android:fce91dc4b407ebeaba84db",
+        "android_client_info": {
+          "package_name": "com.laila.ecommerceapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3v8Ie-a8CfZWeogpjla_7lFjaBztD3O4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

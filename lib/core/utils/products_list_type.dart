@@ -1,0 +1,1 @@
+enum ProductsListType { sale, newProducts }

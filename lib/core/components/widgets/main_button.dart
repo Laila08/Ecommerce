@@ -1,0 +1,35 @@
+import 'package:flutter/material.dart';
+
+import '../../extensions/app_extentions.dart';
+import '../../utils/app_colors.dart';
+import '../../theme/app_text_styles.dart';
+
+class MainButton extends StatelessWidget {
+  final String title;
+  final void Function ()? onTap;
+  const MainButton({super.key, required this.title, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: 14.vPading,
+        decoration: BoxDecoration(
+          borderRadius: 25.allBorderRadius,
+          color: AppColors.primaryColor,
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.primaryColor.withValues(alpha: 0.25),
+              blurRadius: 8,
+              spreadRadius: 0,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Text(title, style: AppTextStyles.font15WhiteWeight500).center(),
+      ),
+    );
+  }
+}
