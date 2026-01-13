@@ -14,10 +14,12 @@ class AppTextField extends StatelessWidget {
   final VoidCallback? onEditingCompleteFun;
   final TextInputAction textInputAction;
   final ValueChanged<String> onChangedFunction;
-  const AppTextField({
+  AutovalidateMode? autovalidateMode;
+   AppTextField({
     super.key,
     required this.labelText,
     this.keyboardType,
+    this.autovalidateMode,
     this.controller,
     required this.validator,
     this.suffixIcon,
@@ -51,6 +53,7 @@ class AppTextField extends StatelessWidget {
         cursorColor: AppColors.blackColor,
         keyboardType: keyboardType,
         onChanged:onChangedFunction,
+        autovalidateMode:autovalidateMode,
         validator: (x) => validator(x),
         textInputAction: textInputAction,
         decoration: InputDecoration(

@@ -5,9 +5,12 @@ import '../../utils/app_colors.dart';
 import '../../theme/app_text_styles.dart';
 
 class MainButton extends StatelessWidget {
-  final String title;
-  final void Function ()? onTap;
-  const MainButton({super.key, required this.title, this.onTap});
+  final String? title;
+  final void Function()? onTap;
+  final Widget? child;
+  MainButton({super.key, this.title, this.onTap, this.child}) {
+    assert(title != null || child != null);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +31,9 @@ class MainButton extends StatelessWidget {
             ),
           ],
         ),
-        child: Text(title, style: AppTextStyles.font15WhiteWeight500).center(),
+        child: title != null
+            ? Text(title!, style: AppTextStyles.font15WhiteWeight500).center()
+            : child,
       ),
     );
   }

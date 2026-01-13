@@ -20,14 +20,15 @@ abstract class AppTextStyles {
     color: AppColors.whiteColor,
     fontWeight: FontWeight.w500,
   );
-  static const font34WhiteWeight700 = TextStyle(
+  static const font34BlackWeight700 = TextStyle(
     fontSize: 34,
     color: AppColors.blackColor,
     fontWeight: FontWeight.w700,
   );
+
   static const font14WhiteWeight500 = TextStyle(
     fontSize: 14,
-    color: AppColors.grayColor,
+    color: AppColors.whiteColor,
     fontWeight: FontWeight.w500,
   );
 
@@ -69,6 +70,11 @@ abstract class AppTextStyles {
   static const font14RedWeight500 = TextStyle(
     fontSize: 14,
     color: AppColors.errorColor,
+    fontWeight: FontWeight.w500,
+  );
+  static const font14PrimaryWeight500 = TextStyle(
+    fontSize: 14,
+    color: AppColors.primaryColor,
     fontWeight: FontWeight.w500,
   );
   static const font11BlackWeight400 = TextStyle(

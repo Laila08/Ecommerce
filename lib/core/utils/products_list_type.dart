@@ -1,1 +1,1 @@
-enum ProductsListType { sale, newProducts }
+enum ProductsListType { sale, New ,Accesories,Shoes,Clothes}

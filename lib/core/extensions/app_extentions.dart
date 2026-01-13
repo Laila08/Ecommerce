@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/constants.dart';
+
 extension AppNumberExtension on num {
   //----------------------- borderRadius ------------------------
   BorderRadius get allBorderRadius => BorderRadius.circular(toDouble());
@@ -22,12 +24,17 @@ extension AppNumberExtension on num {
 extension SizeExtension on BuildContext{
   double get heigh => MediaQuery.sizeOf(this).height;
   double get width => MediaQuery.sizeOf(this).width;
+  double get  appBarHeight =>
+      MediaQuery.of(this).padding.top + kCupertinoNavigationBarHeight;
 }
 extension ContextExtension on BuildContext{
   ScaffoldMessengerState get scaffoldMessenger => ScaffoldMessenger.of(this);
   void pop<T>([T? result]) => Navigator.pop(this,result);
   Future<T?> pushNamed<T>(String routeName,{Object? arguments}){
-    return Navigator.of(this).pushNamed(routeName,arguments: arguments);
+    return Navigator.of(this).pushNamed(routeName,arguments: arguments,);
+  }
+  Future<T?> pushNamed2<T>(String routeName,{Object? arguments}){
+    return Navigator.of(this,rootNavigator: true).pushNamed(routeName,arguments: arguments,);
   }
   Future<T?> pushNamedAndRemoveUntil<T>(String routeName,{required RoutePredicate predicate,Object? arguments}){
     return Navigator.of(this).pushNamedAndRemoveUntil(routeName,predicate,arguments: arguments);

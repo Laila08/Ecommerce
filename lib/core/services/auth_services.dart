@@ -1,17 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class AuthServices {
-  Future<User?> signinUser(String email, String password);
-  Future<User?> signupUser(String email, String password);
   User? get currentUser;
-  Stream<User?> authStateChanges();
+  Future<User?> loginWithEmailAndPassword(String email, String password);
+  Future<User?> signupWithEmailAndPassword(String email, String password);
+  Future<void> logout();
+
 }
 
-class Auth implements AuthServices {
-  final _firebaseAuth = FirebaseAuth.instance;
+class AuthServicesImp implements AuthServices {
+  final firebaseAuth = FirebaseAuth.instance;
   @override
-  Future<User?> signinUser(String email, String password) async {
-    final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
+  User? get currentUser => firebaseAuth.currentUser;
+
+  @override
+  Future<User?> loginWithEmailAndPassword(String email, String password) async {
+    final userCredential = await firebaseAuth.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
@@ -19,8 +23,11 @@ class Auth implements AuthServices {
   }
 
   @override
-  Future<User?> signupUser(String email, String password) async {
-    final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+  Future<User?> signupWithEmailAndPassword(
+    String email,
+    String password,
+  ) async {
+    final userCredential = await firebaseAuth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
@@ -28,9 +35,7 @@ class Auth implements AuthServices {
   }
 
   @override
-  // TODO: implement currentUser
-  User? get currentUser => _firebaseAuth.currentUser;
-
-  @override
-  Stream<User?> authStateChanges() => _firebaseAuth.authStateChanges();
+  Future<void> logout() async {
+    await firebaseAuth.signOut();
+  }
 }

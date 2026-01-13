@@ -1,9 +1,9 @@
-import 'package:ecommerceapp/core/controllers/auth_controller.dart';
-import 'package:ecommerceapp/core/controllers/navigation_controller.dart';
-import 'package:ecommerceapp/core/services/auth_services.dart';
+import 'package:ecommerceapp/core/controllers/favorite/favorite_cubit.dart';
+import 'package:ecommerceapp/core/routes/routes.dart';
 import 'package:ecommerceapp/core/utils/app_colors.dart';
+import 'package:ecommerceapp/core/controllers/auth/auth_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../core/routes/app_router.dart';
 
@@ -12,26 +12,46 @@ class EcommerceApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
+    return MultiBlocProvider(
       providers: [
-        Provider<AuthServices>(
-            create:(_) => Auth(),),
-        ChangeNotifierProvider(
-          create: (_) => NavigationController(),
+        BlocProvider(
+          create: (context) =>
+          AuthCubit()
+            ..authStatus(),
         ),
-        ChangeNotifierProvider(
-          create: (context) => AuthController(auth:context.read<AuthServices>() ),
-             )
+        BlocProvider(
+          create: (context) => FavoriteCubit()..getFavorites(),
+        ),
       ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primaryColor: AppColors.primaryColor,
-          fontFamily: "Metropolis",
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        ),
-        onGenerateRoute: AppRouter.generateRoute,
+      child: Builder(
+          builder: (context) {
+            return BlocBuilder<AuthCubit, AuthState>(
+              bloc: BlocProvider.of<AuthCubit>(context),
+              buildWhen: (previous, current) =>
+              current is AuthSuccess ||
+                  current is AuthLoading ||
+                  ////////////////////////////////////////////////////////////////////// AuthFailed ما ضافها
+                  current is AuthFailed ||
+                  current is AuthInitial,
+              builder: (context, state) {
+                return MaterialApp(
+                  title: 'Flutter Demo',
+                  debugShowCheckedModeBanner: false,
+                  theme: ThemeData(
+                    primaryColor: AppColors.primaryColor,
+                    fontFamily: "Metropolis",
+                    scaffoldBackgroundColor: AppColors.backGroundColor,
+                    colorScheme: ColorScheme.fromSeed(
+                      seedColor: Colors.deepPurple,
+                    ),
+                  ),
+                  onGenerateRoute: AppRouter.generateRoute,
+                  initialRoute: state is AuthSuccess ? Routes.homepage : Routes
+                      .signup,
+                );
+              },
+            );
+          }
       ),
     );
   }
