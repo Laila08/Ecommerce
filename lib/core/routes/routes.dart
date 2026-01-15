@@ -4,7 +4,7 @@ abstract class Routes {
   static const String homepage ='homepage';
   static const String forgotPassword ='forgotPassword';
   static const String productinfo ='productinfo';
-  static const String category ='category';
+  static const String category ='category_details';
   static const String categoryProduct ='categoryProduct';
   static const String checkout ='checkout';
 }

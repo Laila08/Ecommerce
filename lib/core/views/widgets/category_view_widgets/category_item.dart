@@ -1,7 +1,5 @@
-import 'package:ecommerceapp/core/controllers/home/home_cubit.dart';
 import 'package:ecommerceapp/core/models/product_model.dart';
 import 'package:ecommerceapp/core/routes/routes.dart';
-import 'package:ecommerceapp/core/utils/products_list_type.dart';
 import 'package:flutter/material.dart';
 
 import '../../../extensions/app_extentions.dart';
@@ -18,7 +16,8 @@ class CategoryItem extends StatelessWidget {
     required this.catImage,
     required this.catName,
     required this.products,
-    required this.gender, required this.catTypesList,
+    required this.gender,
+    required this.catTypesList,
   });
 
   @override
@@ -31,7 +30,7 @@ class CategoryItem extends StatelessWidget {
             'catName': catName,
             'products': products,
             'gender': gender,
-            'catTypesList':catTypesList,
+            'catTypesList': catTypesList,
           },
         );
       },
@@ -57,12 +56,19 @@ class CategoryItem extends StatelessWidget {
                   topRight: Radius.circular(16),
                   bottomRight: Radius.circular(16),
                 ),
-                child: Image.asset(
-                  catImage,
-                  width: 171,
-                  height: 100,
-                  fit: BoxFit.cover,
-                ),
+                child: catImage.startsWith('http')
+                    ? Image.network(
+                        catImage,
+                        width: 171,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      )
+                    : Image.asset(
+                        catImage,
+                        width: 171,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      ),
               ),
             ),
           ],

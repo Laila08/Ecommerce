@@ -10,6 +10,26 @@ class CartCubit extends Cubit<CartState> {
   CartCubit() : super(CartInitial());
   final cartServices = CartServicesImpl();
   final authServices = AuthServicesImp();
+
+  Future<void> removeFromCarts(CartModel product) async {
+    final currentState = state as CartISuccess;
+    final user = authServices.currentUser;
+    try {
+      await cartServices.removeFromCarts(user!.uid, product.cartId);
+      final updatedProducts = currentState.cartProducts
+          .where((item) => item.cartId != product.cartId)
+          .toList();
+      emit(
+        CartISuccess(
+          cartProducts: updatedProducts,
+          totalPrice: _calculateTotal(updatedProducts),
+        ),
+      );
+    } catch (e) {
+      emit(CartIFailed(e.toString()));
+    }
+  }
+
   Future<void> getCartProducts() async {
     emit(CartILoading());
     try {

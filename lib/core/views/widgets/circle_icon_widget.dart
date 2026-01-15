@@ -17,9 +17,9 @@ class CircleIconWidget extends StatelessWidget {
           boxShadow:  [
             BoxShadow(
               spreadRadius: 0,
-              blurRadius: 4,
+              blurRadius: 8,
               offset: Offset(0, 4),
-              color: AppColors.grayColor.withValues(alpha: 0.8),
+              color: AppColors.grayColor.withValues(alpha: 0.10),
             ),
           ],
           borderRadius: BorderRadius.circular(20),

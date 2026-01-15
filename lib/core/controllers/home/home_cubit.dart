@@ -14,15 +14,6 @@ class HomeCubit extends Cubit<HomeState> {
   List<ProductModel>? filteredProducts;
   String? selectedCatType;
 
-  // final catTypesMap = {
-  //   for (var type in productsList)
-  //     type.name: products
-  //         .where((p) => p.productCategory == type.name)
-  //         .map((p) => p.catType)
-  //         .toSet()
-  //         .toList(),
-  // };
-
   void sortProducts(SortType sortType) {
     List<ProductModel> productsToSort = filteredProducts ?? currentProducts;
     switch (sortType) {

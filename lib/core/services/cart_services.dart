@@ -8,11 +8,14 @@ abstract class CartServices {
   Future<void> addProductToCart(String userId,CartModel cartProduct);
   Future<List<CartModel>> getCartProducts(String userId);
   Future<void> addProductToFavorite(String userId, ProductModel product);
+  Future<void> removeFromCarts(String userId, String productId);
 }
 
 class CartServicesImpl implements CartServices{
   final _services = FirestoreServices.instance;
-
+  @override
+  Future<void> removeFromCarts(String userId, String productId) async =>
+      await _services.deleteData(path: ApiPath.carts(userId, productId));
   @override
   Future<void> addProductToCart(String userId, CartModel cartProduct)async => await _services.setData(
     path: ApiPath.carts(userId, cartProduct.productId),

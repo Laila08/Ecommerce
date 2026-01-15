@@ -1,17 +1,14 @@
+import 'package:ecommerceapp/core/controllers/checkout/checkout_cubit.dart';
 import 'package:ecommerceapp/core/controllers/home/home_cubit.dart';
 import 'package:ecommerceapp/core/controllers/product_details/product_details_cubit.dart';
-import 'package:ecommerceapp/core/models/product_model.dart';
 import 'package:ecommerceapp/core/routes/routes.dart';
-import 'package:ecommerceapp/core/utils/products_list_type.dart';
 import 'package:ecommerceapp/core/views/Checkout_view.dart';
 import 'package:ecommerceapp/core/views/category_details_view.dart';
-import 'package:ecommerceapp/core/views/category_view.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-
-import '../controllers/category/category_cubit.dart';
+import '../controllers/category_details/category_details_cubit.dart';
 import '../controllers/navigation_controller.dart';
 import '../views/forgot_password_view.dart';
 import '../views/login_view.dart';
@@ -28,8 +25,12 @@ abstract class AppRouter {
           settings: settings,
         );
       case Routes.checkout:
+        final totalPrice = settings.arguments as double;
         return CupertinoPageRoute(
-          builder: (_) => CheckoutView(),
+          builder: (_) => BlocProvider(
+            create: (context) => CheckoutCubit()..getDeliveryMethods(),
+            child: CheckoutView(totalPrice:totalPrice),
+          ),
           settings: settings,
         );
       case Routes.categoryProduct:
@@ -37,7 +38,7 @@ abstract class AppRouter {
 
         return CupertinoPageRoute(
           builder: (_) => BlocProvider(
-            create: (_) => CategoryCubit(args['products']),
+            create: (_) => CategoryDetailsCubit(args['products']),
             child: CategoryDetailsView(
               catName: args['catName'],
               gender: args['gender'],
@@ -74,9 +75,7 @@ abstract class AppRouter {
         return CupertinoPageRoute(
           builder: (_) => MultiProvider(
             providers: [
-              ChangeNotifierProvider(
-                create: (_) => NavigationController(),
-              ),
+              ChangeNotifierProvider(create: (_) => NavigationController()),
               BlocProvider<HomeCubit>(
                 create: (_) => HomeCubit()..getHomeProducts(),
               ),
@@ -85,7 +84,6 @@ abstract class AppRouter {
           ),
           settings: settings,
         );
-
 
       default:
         return CupertinoPageRoute(

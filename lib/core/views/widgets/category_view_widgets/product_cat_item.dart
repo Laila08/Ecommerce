@@ -20,19 +20,17 @@ class ProductCatItem extends StatelessWidget {
     final width = context.width;
     return Stack(
       children: [
-        Column(
-          children: [
-            _itemCard(width, product),
-          ],
-        ),
+        Column(children: [_itemCard(width, product)]),
         Positioned(
           bottom: 5,
           right: 0,
-          child:   BlocBuilder<FavoriteCubit, FavoriteState>(
+          child: BlocBuilder<FavoriteCubit, FavoriteState>(
             builder: (context, favState) {
               bool isFav = false;
               if (favState is FavoriteSuccess) {
-                isFav = favState.favoriteProducts.any((p) => p.productId == product.productId);
+                isFav = favState.favoriteProducts.any(
+                  (p) => p.productId == product.productId,
+                );
               }
               return FavoriteIconWidget(
                 isFavorite: isFav,

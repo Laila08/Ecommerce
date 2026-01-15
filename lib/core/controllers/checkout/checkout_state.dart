@@ -9,12 +9,13 @@ final class CheckoutLoading extends CheckoutState {}
 
 final class CheckoutLoaded extends CheckoutState {
   final List<DeliveryMethodModel> deliveryMethods;
+  final DeliveryMethodModel? selectedMethod;
   final ShippingAddressModel? shippingAddress;
 
   CheckoutLoaded({
     required this.deliveryMethods,
     this.shippingAddress,
-
+    this.selectedMethod,
   });
 }
 

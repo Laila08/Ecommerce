@@ -42,9 +42,9 @@ class ProductInfoWidget extends StatelessWidget {
 
               disCount !=0 ? TextSpan(
                 text: " ${finalPrice.toString()}\$",
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 11,
-                  color: Colors.red,
+                  color:AppColors.primaryColor ,
                   decoration: TextDecoration.none,
                 ),
               ):TextSpan(),

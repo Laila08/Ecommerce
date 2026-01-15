@@ -67,6 +67,11 @@ abstract class AppTextStyles {
     color: AppColors.grayColor,
     fontWeight: FontWeight.w500,
   );
+  static const font16GrayWeight400 = TextStyle(
+    fontSize: 16,
+    color: AppColors.grayColor,
+    fontWeight: FontWeight.w400,
+  );
   static const font14RedWeight500 = TextStyle(
     fontSize: 14,
     color: AppColors.errorColor,

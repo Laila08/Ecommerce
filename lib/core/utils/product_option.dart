@@ -1,0 +1,1 @@
+enum ProductOption { addToFavorites, delete }

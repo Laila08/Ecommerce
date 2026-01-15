@@ -12,7 +12,27 @@ class CheckoutCubit extends Cubit<CheckoutState> {
   CheckoutCubit() : super(CheckoutInitial());
   final checkoutServices = CheckoutServicesImpl();
   final authServices = AuthServicesImp();
+  Future<void> getDeliveryMethods() async {
+    final deliveryMethods = await checkoutServices.getDeliveryMethods();
+    emit(
+      CheckoutLoaded(
+        deliveryMethods: deliveryMethods,
+        selectedMethod: deliveryMethods.first,
+      ),
+    );
+  }
 
-
+  void setSelectedMethode(DeliveryMethodModel deliveryMethod) {
+    if (state is CheckoutLoaded) {
+      final current = state as CheckoutLoaded;
+      emit(
+        CheckoutLoaded(
+          deliveryMethods: current.deliveryMethods,
+          selectedMethod: deliveryMethod,
+          shippingAddress: current.shippingAddress,
+        ),
+      );
+    }
+  }
 
 }

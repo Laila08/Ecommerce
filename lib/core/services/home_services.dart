@@ -83,7 +83,7 @@ class HomeServicesImp implements HomeServices {
     builder: (data, documentId) => ProductModel.fromMap(data, documentId),
     queryBuilder: (query) => query
         .where('gender', isEqualTo: gender)
-        .where('category', isEqualTo: category),
+        .where('category_details', isEqualTo: category),
   );
   @override
   Future<List<ProductModel>> getFilteredProductsByGender({
@@ -123,7 +123,7 @@ class HomeServicesImp implements HomeServices {
     queryBuilder: (query) => query
         .where('gender', isEqualTo: gender)
         .where('catType', isEqualTo: type)
-        .where('category', isEqualTo: category),
+        .where('category_details', isEqualTo: category),
   );
 
 }
