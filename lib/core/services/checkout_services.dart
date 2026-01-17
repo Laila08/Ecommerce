@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 import '../models/delivery_method_model.dart';
 import '../models/shipping_address.dart';
@@ -8,7 +8,7 @@ import 'firestore_services.dart';
 abstract class CheckoutServices {
   Future<List<ShippingAddressModel>> getShippingAddresses(String uid);
   Future<List<DeliveryMethodModel>> getDeliveryMethods();
-  Future<void> saveAddress(String userId, ShippingAddressModel shippingAddress);
+  Future<void> saveShippingAddresses(String userId, ShippingAddressModel shippingAddress);
 }
 
 class CheckoutServicesImpl implements CheckoutServices {
@@ -25,17 +25,28 @@ class CheckoutServicesImpl implements CheckoutServices {
   @override
   Future<List<ShippingAddressModel>> getShippingAddresses(String userId) async =>
       await _services.getCollection(
-        path: ApiPath.userShippingAddress(userId),
+        path: ApiPath.shippingAddress(userId),
         builder: (data, documentId) =>
             ShippingAddressModel.fromMap(data, documentId),
       );
 
   @override
-  Future<void> saveAddress(
-    String userId,
-    ShippingAddressModel shippingAddress,
-  ) async => await _services.setData(
-    path: ApiPath.newShippingAddress(userId, shippingAddress.id),
-    data: shippingAddress.toMap(),
-  );
+  @override
+  Future<void> saveShippingAddresses(
+      String userId,
+      ShippingAddressModel shippingAddress,
+      ) async {
+    debugPrint('🔥 SAVING ADDRESS');
+    debugPrint('UID: $userId');
+    debugPrint('PATH: ${ApiPath.newShippingAddress(userId, shippingAddress.id)}');
+    debugPrint('DATA: ${shippingAddress.toMap()}');
+
+    await _services.setData(
+      path: ApiPath.newShippingAddress(userId, shippingAddress.id),
+      data: shippingAddress.toMap(),
+    );
+
+    debugPrint('✅ ADDRESS SAVED');
+  }
+
 }

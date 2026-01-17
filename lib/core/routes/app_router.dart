@@ -1,8 +1,11 @@
 import 'package:ecommerceapp/core/controllers/checkout/checkout_cubit.dart';
+import 'package:ecommerceapp/core/controllers/checkout/shipping_address/shipping_address_cubit.dart';
 import 'package:ecommerceapp/core/controllers/home/home_cubit.dart';
 import 'package:ecommerceapp/core/controllers/product_details/product_details_cubit.dart';
 import 'package:ecommerceapp/core/routes/routes.dart';
 import 'package:ecommerceapp/core/views/Checkout_view.dart';
+import 'package:ecommerceapp/core/views/adding_addresses_view.dart';
+import 'package:ecommerceapp/core/views/addresses_view.dart';
 import 'package:ecommerceapp/core/views/category_details_view.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -27,9 +30,17 @@ abstract class AppRouter {
       case Routes.checkout:
         final totalPrice = settings.arguments as double;
         return CupertinoPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) => CheckoutCubit()..getDeliveryMethods(),
-            child: CheckoutView(totalPrice:totalPrice),
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => CheckoutCubit()..getDeliveryMethods(),
+              ),
+              BlocProvider(
+                create: (context) =>
+                    ShippingAddressCubit()..getShippingAddresses(),
+              ),
+            ],
+            child: CheckoutView(totalPrice: totalPrice),
           ),
           settings: settings,
         );
@@ -53,6 +64,21 @@ abstract class AppRouter {
           builder: (_) => SignUpView(),
           settings: settings,
         );
+      case Routes.shippingAddresses:
+        final cubit = settings.arguments as ShippingAddressCubit;
+        return CupertinoPageRoute(
+          builder: (_) =>
+              BlocProvider.value(value: cubit, child: AddressesView()),
+          settings: settings,
+        );
+      case Routes.setShippingAddresses:
+        final cubit = settings.arguments as ShippingAddressCubit;
+        return CupertinoPageRoute(
+          builder: (_) =>
+              BlocProvider.value(value: cubit, child: AddingAddressesView()),
+          settings: settings,
+        );
+
       case Routes.productinfo:
         final productId = settings.arguments as String;
         return CupertinoPageRoute(

@@ -2,8 +2,10 @@ import 'package:ecommerceapp/core/components/widgets/app_dialog.dart';
 import 'package:ecommerceapp/core/components/widgets/arrow_back_icon.dart';
 import 'package:ecommerceapp/core/components/widgets/main_button.dart';
 import 'package:ecommerceapp/core/controllers/checkout/checkout_cubit.dart';
+import 'package:ecommerceapp/core/controllers/checkout/shipping_address/shipping_address_cubit.dart';
 import 'package:ecommerceapp/core/extensions/app_extentions.dart';
 import 'package:ecommerceapp/core/models/delivery_method_model.dart';
+import 'package:ecommerceapp/core/routes/routes.dart';
 import 'package:ecommerceapp/core/theme/app_text_styles.dart';
 import 'package:ecommerceapp/core/utils/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -26,138 +28,68 @@ class CheckoutView extends StatelessWidget {
     }
 
     final checkoutCubit = context.read<CheckoutCubit>();
-    return Scaffold(
-      appBar: AppBar(
-        leading: ArrowBackIcon(),
-        backgroundColor: AppColors.whiteColor,
-        centerTitle: true,
-        title: Text("Checkout", style: AppTextStyles.font18BlackWeight400),
-      ),
-      backgroundColor: AppColors.backGroundColor,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Column(
+    final shippingAddressCubit = context.read<ShippingAddressCubit>();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      shippingAddressCubit.getShippingAddresses();
+    });
+    return BlocListener<ShippingAddressCubit, ShippingAddressState>(
+      listener: (context, state) {
+        if (state is ShippingAddressesLoaded &&
+            state.shippingAddresses.isEmpty) {
+          context.pushNamed(
+            Routes.setShippingAddresses,
+            arguments: shippingAddressCubit,
+          );
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              context.pushNamedAndRemoveUntil(
+                Routes.homepage,
+                arguments: 2,
+                predicate: (route) => false,
+              );
+            },
+            icon: Icon(Icons.arrow_back_ios),
+          ),
+          backgroundColor: AppColors.whiteColor,
+          centerTitle: true,
+          title: Text("Checkout", style: AppTextStyles.font18BlackWeight400),
+        ),
+        backgroundColor: AppColors.backGroundColor,
+        body: SingleChildScrollView(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Shipping address',
-                style: AppTextStyles.font16BlackWeight400,
-              ).onlyPadding(bottomPadding: 16),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                decoration: BoxDecoration(
-                  borderRadius: 16.allBorderRadius,
-                  color: AppColors.whiteColor,
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.blackColor.withValues(alpha: 0.08),
-                      offset: Offset(0, 1),
-                      spreadRadius: 0,
-                      blurRadius: 25,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text("Jane Doe"),
-                        Spacer(),
-                        TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            "Change",
-                            style: AppTextStyles.font14PrimaryWeight500,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Text(
-                      "3 Newbridge Court \nChino Hills, CA 91709, United States",
-                    ).onlyPadding(bottomPadding: 10),
-                  ],
-                ),
-              ),
-            ],
-          ).onlyPadding(bottomPadding: 45),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Payment',
+                    'Shipping address',
                     style: AppTextStyles.font16BlackWeight400,
                   ).onlyPadding(bottomPadding: 16),
-                  Spacer(),
-                  TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      "Change",
-                      style: AppTextStyles.font14PrimaryWeight500,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(borderRadius: 16.allBorderRadius),
-                    child: Image.asset(
-                      "assets/images/mastercard.png",
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ).onlyPadding(bottomPadding: 45),
-        Text(
-              'Delivery method',
-              style: AppTextStyles.font16BlackWeight400,
-            ).onlyPadding(bottomPadding: 7),
-
-          BlocBuilder<CheckoutCubit, CheckoutState>(
-            bloc: checkoutCubit,
-            buildWhen: (previous, current) =>
-                current is CheckoutLoading ||
-                current is CheckoutFailed ||
-                current is CheckoutLoaded,
-            builder: (context, state) {
-              if (state is CheckoutLoading) {
-                return CircularProgressIndicator().center();
-              } else if (state is CheckoutFailed) {
-                return AppDialog(message: state.error);
-              } else if (state is CheckoutLoaded) {
-                final deliveryMethods = state.deliveryMethods;
-                final delivery = deliveryInfo(state.selectedMethod!);
-                return Column(
-                  children: [
-                    SizedBox(
-                      height: 72,
-                      child: Row(
-                        children: List.generate(deliveryMethods.length, (
-                          index,
-                        ) {
-                          final deliveryMethod = deliveryMethods[index];
-                          return Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                checkoutCubit.setSelectedMethode(deliveryMethod);
-                              },
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              hoverColor: Colors.transparent,
-                              child: Container(
-                                margin: EdgeInsets.only(
-                                  right: index == deliveryMethods.length - 1
-                                      ? 0
-                                      : 16,
+                  BlocBuilder<ShippingAddressCubit, ShippingAddressState>(
+                    bloc: shippingAddressCubit,
+                    buildWhen: (previous, current) =>
+                        current is AddingShippingAddress ||
+                        current is ShippingAddressesLoaded ||
+                        current is ShippingAddressAddingFailed,
+                    builder: (context, state) {
+                      if (state is AddingShippingAddress) {
+                        return CircularProgressIndicator().center();
+                      } else if (state is ShippingAddressAddingFailed) {
+                        return AppDialog(message: state.error);
+                      } else if (state is ShippingAddressesLoaded) {
+                        final defaultAddress = state.defaultAddress;
+                        return defaultAddress == null
+                            ? TextButton(onPressed: () {}, child: Text("No addresses added yet"))
+                            : Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 25,
+                                  vertical: 10,
                                 ),
-                                padding: 10.allPading,
-                                height: 72,
                                 decoration: BoxDecoration(
                                   borderRadius: 16.allBorderRadius,
                                   color: AppColors.whiteColor,
@@ -166,58 +98,194 @@ class CheckoutView extends StatelessWidget {
                                       color: AppColors.blackColor.withValues(
                                         alpha: 0.08,
                                       ),
-                                      blurRadius: 25,
                                       offset: Offset(0, 1),
+                                      spreadRadius: 0,
+                                      blurRadius: 25,
                                     ),
                                   ],
                                 ),
                                 child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Image.asset(deliveryMethod.imgUrl),
-                                    Text(
-                                      deliveryMethod.days,
-                                      style: AppTextStyles.font11GrayWeight400,
+                                    Row(
+                                      children: [
+                                        Text(defaultAddress.address),
+                                        Spacer(),
+                                        TextButton(
+                                          onPressed: () {
+                                            context.pushNamed(
+                                              Routes.shippingAddresses,
+                                              arguments: shippingAddressCubit,
+                                            );
+                                          },
+                                          child: Text(
+                                           "change",
+                                            style: AppTextStyles
+                                                .font14PrimaryWeight500,
+                                          ),
+                                        ),
+                                      ],
                                     ),
+                                    Text(
+                                      "3 Newbridge Court \nChino Hills, CA 91709, United States",
+                                    ).onlyPadding(bottomPadding: 10),
                                   ],
                                 ),
-                              ),
-                            ),
-                          );
-                        }),
+                              );
+                      } else {
+                        return SizedBox.shrink();
+                      }
+                    },
+                  ),
+                ],
+              ).onlyPadding(bottomPadding: 45),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'Payment',
+                        style: AppTextStyles.font16BlackWeight400,
+                      ).onlyPadding(bottomPadding: 16),
+                      Spacer(),
+                      TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          "Change",
+                          style: AppTextStyles.font14PrimaryWeight500,
+                        ),
                       ),
-                    ),
-                    Column(
-                      children: List.generate(delivery.length, (index) {
-                        final item = delivery[index];
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 6),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: 16.allBorderRadius,
+                        ),
+                        child: Image.asset(
+                          "assets/images/mastercard.png",
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ).onlyPadding(bottomPadding: 45),
+              Text(
+                'Delivery method',
+                style: AppTextStyles.font16BlackWeight400,
+              ).onlyPadding(bottomPadding: 7),
+
+              BlocBuilder<CheckoutCubit, CheckoutState>(
+                bloc: checkoutCubit,
+                buildWhen: (previous, current) =>
+                    current is DeliveryMethodLoading ||
+                    current is DeliveryMethodLoaded ||
+                    current is DeliveryMethodFailed,
+                builder: (context, state) {
+                  if (state is DeliveryMethodLoading) {
+                    return CircularProgressIndicator().center();
+                  } else if (state is DeliveryMethodFailed) {
+                    return AppDialog(message: state.error);
+                  } else if (state is DeliveryMethodLoaded) {
+                    final deliveryMethods = state.deliveryMethods;
+                    final delivery = deliveryInfo(state.selectedMethod!);
+                    return Column(
+                      children: [
+                        SizedBox(
+                          height: 72,
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                item.key,
-                                style: item.key=='Summary:'?AppTextStyles.font16GrayWeight400:AppTextStyles.font14GrayWeight500,
-                              ),
-                              Text(
-                                '${item.value}\$',
-                                style: item.key=='Summary:'?AppTextStyles.font18BlackWeight400:AppTextStyles.font16BlackWeight400,
-                              ),
-                            ],
+                            children: List.generate(deliveryMethods.length, (
+                              index,
+                            ) {
+                              final deliveryMethod = deliveryMethods[index];
+                              return Expanded(
+                                child: InkWell(
+                                  onTap: () {
+                                    checkoutCubit.setSelectedMethode(
+                                      deliveryMethod,
+                                    );
+                                  },
+                                  splashColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  child: Container(
+                                    margin: EdgeInsets.only(
+                                      right: index == deliveryMethods.length - 1
+                                          ? 0
+                                          : 16,
+                                    ),
+                                    padding: 10.allPading,
+                                    height: 72,
+                                    decoration: BoxDecoration(
+                                      borderRadius: 16.allBorderRadius,
+                                      color: AppColors.whiteColor,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: AppColors.blackColor
+                                              .withValues(alpha: 0.08),
+                                          blurRadius: 25,
+                                          offset: Offset(0, 1),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Image.asset(deliveryMethod.imgUrl),
+                                        Text(
+                                          deliveryMethod.days,
+                                          style:
+                                              AppTextStyles.font11GrayWeight400,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
                           ),
-                        );
-                      }),
-                    ).onlyPadding(topPadding: 40),
-                  ],
-                );
-              }
-              return SizedBox.shrink();
-            },
-          ).verticalPadding(20),
-          MainButton(title: "SUBMIT ORDER"),
-        ],
-      ).allPading(16),
+                        ),
+                        Column(
+                          children: List.generate(delivery.length, (index) {
+                            final item = delivery[index];
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 6),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    item.key,
+                                    style: item.key == 'Summary:'
+                                        ? AppTextStyles.font16GrayWeight400
+                                        : AppTextStyles.font14GrayWeight500,
+                                  ),
+                                  Text(
+                                    '${item.value}\$',
+                                    style: item.key == 'Summary:'
+                                        ? AppTextStyles.font18BlackWeight400
+                                        : AppTextStyles.font16BlackWeight400,
+                                  ),
+                                ],
+                              ),
+                            );
+                          }),
+                        ).onlyPadding(topPadding: 40),
+                      ],
+                    );
+                  }
+                  return SizedBox.shrink();
+                },
+              ).verticalPadding(20),
+              MainButton(title: "SUBMIT ORDER"),
+            ],
+          ).allPading(16),
+        ),
+      ),
     );
   }
 }

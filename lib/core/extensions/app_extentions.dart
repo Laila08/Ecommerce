@@ -30,6 +30,10 @@ extension SizeExtension on BuildContext{
 extension ContextExtension on BuildContext{
   ScaffoldMessengerState get scaffoldMessenger => ScaffoldMessenger.of(this);
   void pop<T>([T? result]) => Navigator.pop(this,result);
+  void popUntil(RoutePredicate predicate) {
+    Navigator.of(this).popUntil(predicate);
+  }
+
   Future<T?> pushNamed<T>(String routeName,{Object? arguments}){
     return Navigator.of(this).pushNamed(routeName,arguments: arguments,);
   }

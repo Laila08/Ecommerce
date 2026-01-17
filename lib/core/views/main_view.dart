@@ -18,7 +18,12 @@ class MainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final navController = Provider.of<NavigationController>(context);
-
+    final int? initialIndex = ModalRoute.of(context)?.settings.arguments as int?;
+    if (initialIndex != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        navController.changeIndex(initialIndex);
+      });
+    }
     final List<Widget> pages = [
       HomeView(),
       CategoryView(),

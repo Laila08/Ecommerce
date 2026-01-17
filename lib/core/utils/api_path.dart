@@ -6,7 +6,7 @@ class ApiPath {
   static String productsCart(String uid) => 'users/$uid/carts/';
   static String favorites(String uid,String productId) => 'users/$uid/favorites/$productId';
   static String favoriteProducts(String uid,) => 'users/$uid/favorites/';
-  static String userShippingAddress(String uid,) => 'users/$uid/shippingAddress/';
-  static String newShippingAddress(String uid,String shippingAdrId) => 'users/$uid/shippingAddress/$shippingAdrId';
   static String deliveryMethods() => 'deliveryMethods/';
+  static String newShippingAddress(String uid,String addressId) => 'users/$uid/shippingAddress/$addressId';
+  static String shippingAddress(String uid) => 'users/$uid/shippingAddress/';
 }

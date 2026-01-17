@@ -10,6 +10,8 @@ import 'package:ecommerceapp/core/views/widgets/rating_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../routes/routes.dart';
+
 class FavoriteItemWidget extends StatelessWidget {
   final ProductModel product;
 
@@ -23,8 +25,8 @@ class FavoriteItemWidget extends StatelessWidget {
       children: [
         Column(
           children: [
-            _itemCard(width, product, favoriteCubit,),
-            Container(color: AppColors.backGroundColor, height: 20,),
+            _itemCard(width, product, favoriteCubit),
+            Container(color: AppColors.backGroundColor, height: 20),
           ],
         ),
         BlocBuilder<HomeCubit, HomeState>(
@@ -34,28 +36,31 @@ class FavoriteItemWidget extends StatelessWidget {
             bool isNew = false;
 
             if (state is HomeSuccess) {
-              isHaveDiscount = state.salesProducts
-                  .any((p) => p.productId == product.productId && (p.productDiscount ?? 0) > 0);
+              isHaveDiscount = state.salesProducts.any(
+                (p) =>
+                    p.productId == product.productId &&
+                    (p.productDiscount ?? 0) > 0,
+              );
               if (!isHaveDiscount) {
-                isNew = state.newProducts
-                    .any((p) => p.productId == product.productId);
+                isNew = state.newProducts.any(
+                  (p) => p.productId == product.productId,
+                );
               }
             }
 
-            return  isHaveDiscount
+            return isHaveDiscount
                 ? ProductBadgeWidget(
-              title: "${product.productDiscount}%",
-              color: AppColors.primaryColor,
-              textStyle: AppTextStyles.font11WhiteWeight400,
-            )
+                    title: "${product.productDiscount}%",
+                    color: AppColors.primaryColor,
+                    textStyle: AppTextStyles.font11WhiteWeight400,
+                  )
                 : isNew
                 ? ProductBadgeWidget(
-              title: "New",
-              color: AppColors.blackColor,
-              textStyle: AppTextStyles.font11WhiteWeight400,
-            )
+                    title: "New",
+                    color: AppColors.blackColor,
+                    textStyle: AppTextStyles.font11WhiteWeight400,
+                  )
                 : SizedBox();
-
           },
         ),
         BlocBuilder<CartCubit, CartState>(
@@ -63,111 +68,123 @@ class FavoriteItemWidget extends StatelessWidget {
           builder: (context, state) {
             bool isInCart = false;
             if (state is CartISuccess) {
-              isInCart = state.cartProducts
-                  .any((cartItem) => cartItem.productId == product.productId);
+              isInCart = state.cartProducts.any(
+                (cartItem) => cartItem.productId == product.productId,
+              );
             }
-            return isInCart ? Positioned(
-              bottom: 3,
-              right: 0,
-              child: CircleAvatar(
-                radius: 18,
-                backgroundColor: AppColors.primaryColor,
-                child: Icon(Icons.shopping_bag, color: AppColors.whiteColor),
-              ),
-            ) : SizedBox();
+            return isInCart
+                ? Positioned(
+                    bottom: 3,
+                    right: 0,
+                    child: CircleAvatar(
+                      radius: 18,
+                      backgroundColor: AppColors.primaryColor,
+                      child: Icon(
+                        Icons.shopping_bag,
+                        color: AppColors.whiteColor,
+                      ),
+                    ),
+                  )
+                : SizedBox();
           },
         ),
       ],
-    ).onlyPadding(topPadding: 15,leftPadding: 16,rightPadding: 16);
+    ).onlyPadding(topPadding: 15, leftPadding: 16, rightPadding: 16);
   }
 }
 
-Widget _itemCard(double width,
-    ProductModel product,
-    FavoriteCubit favoriteCubit,
-    ) {
+Widget _itemCard(
+  double width,
+  ProductModel product,
+  FavoriteCubit favoriteCubit,
+) {
   return BlocBuilder<FavoriteCubit, FavoriteState>(
     builder: (context, state) {
-      return Container(
-        width: width,
-        height: 104,
-        decoration: BoxDecoration(
-          color: AppColors.whiteColor,
-          borderRadius: 16.allBorderRadius,
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadiusGeometry.only(
-                topLeft: Radius.circular(16),
-                bottomLeft: Radius.circular(16),
+      return InkWell(
+        onTap: () {
+          context.pushNamed(Routes.productinfo, arguments: product.productId);
+        },
+        child: Container(
+          width: width,
+          height: 104,
+          decoration: BoxDecoration(
+            color: AppColors.whiteColor,
+            borderRadius: 16.allBorderRadius,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadiusGeometry.only(
+                  topLeft: Radius.circular(16),
+                  bottomLeft: Radius.circular(16),
+                ),
+                child: Image.asset(
+                  product.productImage,
+                  width: 104,
+                  height: 104,
+                  fit: BoxFit.cover,
+                ),
               ),
-              child: Image.asset(
-                product.productImage,
-                width: 104,
-                height: 104,
-                fit: BoxFit.cover,
-              ),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    product.productName,
-                    style: AppTextStyles.font16BlackWeight400,
-                  ),
-                  Text.rich(
-                    TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "Color: ",
-                          style: AppTextStyles.font11GrayWeight400,
-                        ),
-                        TextSpan(
-                          text: "_   ",
-                          style: AppTextStyles.font11BlackWeight400,
-                        ),
-                        TextSpan(
-                          text: "         Size: ",
-                          style: AppTextStyles.font11GrayWeight400,
-                        ),
-                        TextSpan(
-                          text: "_",
-                          style: AppTextStyles.font11BlackWeight400,
-                        ),
-                      ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      product.productName,
+                      style: AppTextStyles.font16BlackWeight400,
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "${product.productPrice}\$",
-                        style: AppTextStyles.font14blackWeight500,
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Color: ",
+                            style: AppTextStyles.font11GrayWeight400,
+                          ),
+                          TextSpan(
+                            text: "_   ",
+                            style: AppTextStyles.font11BlackWeight400,
+                          ),
+                          TextSpan(
+                            text: "         Size: ",
+                            style: AppTextStyles.font11GrayWeight400,
+                          ),
+                          TextSpan(
+                            text: "_",
+                            style: AppTextStyles.font11BlackWeight400,
+                          ),
+                        ],
                       ),
-                      RatingWidget(product: product),
-                    ],
-                  ).onlyPadding(topPadding: 20, rightPadding: 15),
-                ],
-              ).onlyPadding(topPadding: 16, leftPadding: 7),
-            ),
-            BlocBuilder<FavoriteCubit, FavoriteState>(
-              bloc:favoriteCubit,
-              builder: (context, state) {
-                return InkWell(
-                  onTap: () => favoriteCubit.toggleFavorite(product),
-                  child: Icon(
-                    Icons.close,
-                    color: AppColors.grayColor,
-                    size: 17,
-                  ).onlyPadding(rightPadding: 16, topPadding: 16),
-                );
-              }
-            ),
-          ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "${product.productPrice}\$",
+                          style: AppTextStyles.font14blackWeight500,
+                        ),
+                        RatingWidget(product: product),
+                      ],
+                    ).onlyPadding(topPadding: 20, rightPadding: 15),
+                  ],
+                ).onlyPadding(topPadding: 16, leftPadding: 7),
+              ),
+              BlocBuilder<FavoriteCubit, FavoriteState>(
+                bloc: favoriteCubit,
+                builder: (context, state) {
+                  return InkWell(
+                    onTap: () => favoriteCubit.toggleFavorite(product),
+                    child: Icon(
+                      Icons.close,
+                      color: AppColors.grayColor,
+                      size: 17,
+                    ).onlyPadding(rightPadding: 16, topPadding: 16),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       );
     },

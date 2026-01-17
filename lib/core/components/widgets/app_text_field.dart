@@ -14,8 +14,9 @@ class AppTextField extends StatelessWidget {
   final VoidCallback? onEditingCompleteFun;
   final TextInputAction textInputAction;
   final ValueChanged<String> onChangedFunction;
+  final TextStyle hintStyle;
   AutovalidateMode? autovalidateMode;
-   AppTextField({
+  AppTextField({
     super.key,
     required this.labelText,
     this.keyboardType,
@@ -27,6 +28,7 @@ class AppTextField extends StatelessWidget {
     this.onEditingCompleteFun,
     required this.textInputAction,
     required this.onChangedFunction,
+     this.hintStyle =AppTextStyles.font14WhiteWeight500,
   });
   @override
   Widget build(BuildContext context) {
@@ -37,11 +39,12 @@ class AppTextField extends StatelessWidget {
             offset: const Offset(0, 1),
             blurRadius: 8,
             spreadRadius: 0,
-            color: AppColors.whiteColor.withValues(alpha: 0.5),
+            color: AppColors.whiteColor.withValues(alpha: 0.05),
           ),
         ],
       ),
       child: TextFormField(
+
         controller: controller,
         focusNode: focusNodeType,
         onEditingComplete: () {
@@ -57,11 +60,12 @@ class AppTextField extends StatelessWidget {
         validator: (x) => validator(x),
         textInputAction: textInputAction,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.only(left: 20, top: 8, bottom: 8),
+          contentPadding: 20.allPading,
           fillColor: AppColors.whiteColor,
           filled: true,
           hintText: labelText,
-          hintStyle:AppTextStyles.font14WhiteWeight500,
+
+          hintStyle:hintStyle,
           suffixIcon: suffixIcon,
           floatingLabelBehavior: FloatingLabelBehavior.auto,
           floatingLabelStyle: TextStyle(backgroundColor: AppColors.whiteColor),

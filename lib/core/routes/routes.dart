@@ -7,4 +7,7 @@ abstract class Routes {
   static const String category ='category_details';
   static const String categoryProduct ='categoryProduct';
   static const String checkout ='checkout';
+  static const String shippingAddresses ='shippingAddresses';
+  static const String setShippingAddresses ='setShippingAddresses';
+
 }

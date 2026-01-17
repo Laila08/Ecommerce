@@ -15,6 +15,9 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Adding Shipping Address",style: AppTextStyles.font18BlackWeight400,),
+      ),
       backgroundColor: AppColors.backGroundColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

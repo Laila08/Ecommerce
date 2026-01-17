@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../components/widgets/favorite_icon_widget.dart';
+import '../../../routes/routes.dart';
 
 class ProductCatItem extends StatelessWidget {
   final ProductModel product;
@@ -49,62 +50,67 @@ class ProductCatItem extends StatelessWidget {
 Widget _itemCard(double width, ProductModel product) {
   return BlocBuilder<FavoriteCubit, FavoriteState>(
     builder: (context, state) {
-      return Container(
-        width: width,
-        height: 104,
-        decoration: BoxDecoration(
-          color: AppColors.whiteColor,
-          borderRadius: 16.allBorderRadius,
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.blackColor.withValues(alpha: 0.08),
-              blurRadius: 25,
-              spreadRadius: 0,
-              offset: Offset(0, 1),
-            ),
-          ],
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadiusGeometry.only(
-                topLeft: Radius.circular(16),
-                bottomLeft: Radius.circular(16),
+      return InkWell(
+        onTap: (){
+          context.pushNamed(Routes.productinfo,arguments: product.productId);
+        },
+        child: Container(
+          width: width,
+          height: 104,
+          decoration: BoxDecoration(
+            color: AppColors.whiteColor,
+            borderRadius: 16.allBorderRadius,
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.blackColor.withValues(alpha: 0.08),
+                blurRadius: 25,
+                spreadRadius: 0,
+                offset: Offset(0, 1),
               ),
-              child: Image.asset(
-                product.productImage,
-                width: 104,
-                height: 104,
-                fit: BoxFit.cover,
+            ],
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadiusGeometry.only(
+                  topLeft: Radius.circular(16),
+                  bottomLeft: Radius.circular(16),
+                ),
+                child: Image.asset(
+                  product.productImage,
+                  width: 104,
+                  height: 104,
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    product.catType,
-                    style: AppTextStyles.font16BlackWeight400,
-                  ),
-                  Text(
-                    product.productName,
-                    style: AppTextStyles.font11GrayWeight400,
-                  ),
-                  RatingWidget(
-                    product: product,
-                  ).onlyPadding(topPadding: 7, bottomPadding: 4),
-                  Text(
-                    "${product.productPrice}\$",
-                    style: AppTextStyles.font14blackWeight500,
-                  ),
-                ],
-              ).onlyPadding(topPadding: 10, leftPadding: 10),
-            ),
-          ],
-        ),
-      ).onlyPadding(bottomPadding: 16);
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      product.catType,
+                      style: AppTextStyles.font16BlackWeight400,
+                    ),
+                    Text(
+                      product.productName,
+                      style: AppTextStyles.font11GrayWeight400,
+                    ),
+                    RatingWidget(
+                      product: product,
+                    ).onlyPadding(topPadding: 7, bottomPadding: 4),
+                    Text(
+                      "${product.productPrice}\$",
+                      style: AppTextStyles.font14blackWeight500,
+                    ),
+                  ],
+                ).onlyPadding(topPadding: 10, leftPadding: 10),
+              ),
+            ],
+          ),
+        ).onlyPadding(bottomPadding: 16),
+      );
     },
   );
 }

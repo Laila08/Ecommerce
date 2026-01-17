@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:ecommerceapp/core/services/auth_services.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 import '../../models/delivery_method_model.dart';
@@ -9,13 +10,15 @@ import '../../services/checkout_services.dart';
 part 'checkout_state.dart';
 
 class CheckoutCubit extends Cubit<CheckoutState> {
-  CheckoutCubit() : super(CheckoutInitial());
+  CheckoutCubit() : super(DeliveryMethodInitial());
   final checkoutServices = CheckoutServicesImpl();
   final authServices = AuthServicesImp();
+
   Future<void> getDeliveryMethods() async {
+    emit(DeliveryMethodLoading());
     final deliveryMethods = await checkoutServices.getDeliveryMethods();
     emit(
-      CheckoutLoaded(
+      DeliveryMethodLoaded(
         deliveryMethods: deliveryMethods,
         selectedMethod: deliveryMethods.first,
       ),
@@ -23,10 +26,10 @@ class CheckoutCubit extends Cubit<CheckoutState> {
   }
 
   void setSelectedMethode(DeliveryMethodModel deliveryMethod) {
-    if (state is CheckoutLoaded) {
-      final current = state as CheckoutLoaded;
+    if (state is DeliveryMethodLoaded) {
+      final current = state as DeliveryMethodLoaded;
       emit(
-        CheckoutLoaded(
+        DeliveryMethodLoaded(
           deliveryMethods: current.deliveryMethods,
           selectedMethod: deliveryMethod,
           shippingAddress: current.shippingAddress,
@@ -34,5 +37,7 @@ class CheckoutCubit extends Cubit<CheckoutState> {
       );
     }
   }
+
+
 
 }
