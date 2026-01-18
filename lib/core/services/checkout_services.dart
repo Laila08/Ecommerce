@@ -8,11 +8,28 @@ import 'firestore_services.dart';
 abstract class CheckoutServices {
   Future<List<ShippingAddressModel>> getShippingAddresses(String uid);
   Future<List<DeliveryMethodModel>> getDeliveryMethods();
-  Future<void> saveShippingAddresses(String userId, ShippingAddressModel shippingAddress);
+  Future<void> saveShippingAddresses(
+    String userId,
+    ShippingAddressModel shippingAddress,
+  );
+  Future<void> setDefaultShippingAddress(String userId, String addressId);
 }
 
 class CheckoutServicesImpl implements CheckoutServices {
   final _services = FirestoreServices.instance;
+  @override
+  Future<void> setDefaultShippingAddress(
+    String userId,
+    String addressId,
+  ) async {
+    final addresses = await getShippingAddresses(userId);
+    for (final address in addresses) {
+      await saveShippingAddresses(
+        userId,
+        address.copyWith(isDefault: address.id == addressId),
+      );
+    }
+  }
 
   @override
   Future<List<DeliveryMethodModel>> getDeliveryMethods() async =>
@@ -23,30 +40,23 @@ class CheckoutServicesImpl implements CheckoutServices {
       );
 
   @override
-  Future<List<ShippingAddressModel>> getShippingAddresses(String userId) async =>
-      await _services.getCollection(
-        path: ApiPath.shippingAddress(userId),
-        builder: (data, documentId) =>
-            ShippingAddressModel.fromMap(data, documentId),
-      );
+  Future<List<ShippingAddressModel>> getShippingAddresses(
+    String userId,
+  ) async => await _services.getCollection(
+    path: ApiPath.shippingAddress(userId),
+    builder: (data, documentId) =>
+        ShippingAddressModel.fromMap(data, documentId),
+  );
 
   @override
   @override
   Future<void> saveShippingAddresses(
-      String userId,
-      ShippingAddressModel shippingAddress,
-      ) async {
-    debugPrint('🔥 SAVING ADDRESS');
-    debugPrint('UID: $userId');
-    debugPrint('PATH: ${ApiPath.newShippingAddress(userId, shippingAddress.id)}');
-    debugPrint('DATA: ${shippingAddress.toMap()}');
-
+    String userId,
+    ShippingAddressModel shippingAddress,
+  ) async {
     await _services.setData(
       path: ApiPath.newShippingAddress(userId, shippingAddress.id),
       data: shippingAddress.toMap(),
     );
-
-    debugPrint('✅ ADDRESS SAVED');
   }
-
 }

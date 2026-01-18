@@ -24,7 +24,7 @@ class AddressesView extends StatelessWidget {
         backgroundColor: AppColors.whiteColor,
         leading: IconButton(
           onPressed: () {
-            context.pushNamed(Routes.checkout, arguments: 0.0);
+            context.pushNamed(Routes.checkout, arguments:{'totalPrice':0.0,'cubit':shippingAddressCubit});
           },
           icon: Icon(Icons.arrow_back_ios),
         ),

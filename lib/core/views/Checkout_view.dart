@@ -29,18 +29,17 @@ class CheckoutView extends StatelessWidget {
 
     final checkoutCubit = context.read<CheckoutCubit>();
     final shippingAddressCubit = context.read<ShippingAddressCubit>();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      shippingAddressCubit.getShippingAddresses();
-    });
     return BlocListener<ShippingAddressCubit, ShippingAddressState>(
       listener: (context, state) {
-        if (state is ShippingAddressesLoaded &&
-            state.shippingAddresses.isEmpty) {
-          context.pushNamed(
-            Routes.setShippingAddresses,
-            arguments: shippingAddressCubit,
-          );
+        if (state is ShippingAddressesLoaded ){
+          if(state.shippingAddresses.isEmpty){
+            context.pushNamed(
+              Routes.setShippingAddresses,
+              arguments: shippingAddressCubit,
+            );
+            return;
         }
+          }
       },
       child: Scaffold(
         appBar: AppBar(

@@ -1,4 +1,6 @@
+import 'package:ecommerceapp/core/controllers/checkout/shipping_address/shipping_address_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../components/widgets/main_button.dart';
 import '../../../extensions/app_extentions.dart';
@@ -10,9 +12,10 @@ class CartCheckoutButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<ShippingAddressCubit>();
     return MainButton(
       title: "CHECK OUT",
-      onTap: () => context.pushNamed(Routes.checkout,arguments: totalPrice),
+      onTap: () => context.pushNamed(Routes.checkout,arguments: {'totalPrice':totalPrice,'cubit':cubit}),
     ).onlyPadding(bottomPadding: 20);
   }
 }

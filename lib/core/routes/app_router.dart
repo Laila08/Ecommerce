@@ -28,19 +28,17 @@ abstract class AppRouter {
           settings: settings,
         );
       case Routes.checkout:
-        final totalPrice = settings.arguments as double;
+        final args= settings.arguments as Map<String,dynamic>;
+        final cubit = args['cubit'] as ShippingAddressCubit;
+        final totalPrice = args['totalPrice'] as double;
         return CupertinoPageRoute(
           builder: (_) => MultiBlocProvider(
             providers: [
               BlocProvider(
                 create: (context) => CheckoutCubit()..getDeliveryMethods(),
               ),
-              BlocProvider(
-                create: (context) =>
-                    ShippingAddressCubit()..getShippingAddresses(),
-              ),
             ],
-            child: CheckoutView(totalPrice: totalPrice),
+            child: BlocProvider.value(value:cubit,child: CheckoutView(totalPrice: totalPrice),),
           ),
           settings: settings,
         );

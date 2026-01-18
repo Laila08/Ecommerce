@@ -1,5 +1,4 @@
 import 'package:ecommerceapp/core/components/widgets/app_text_field.dart';
-import 'package:ecommerceapp/core/components/widgets/arrow_back_icon.dart';
 import 'package:ecommerceapp/core/components/widgets/main_button.dart';
 import 'package:ecommerceapp/core/controllers/checkout/shipping_address/shipping_address_cubit.dart';
 import 'package:ecommerceapp/core/extensions/app_extentions.dart';
@@ -11,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../utils/constants.dart';
-
 class AddingAddressesView extends StatelessWidget {
   const AddingAddressesView({super.key});
   @override
@@ -28,14 +26,15 @@ class AddingAddressesView extends StatelessWidget {
           address: shippingAddressCubit.addressController.text,
           city: shippingAddressCubit.cityController.text,
           state: shippingAddressCubit.regionController.text,
-          zipCode: shippingAddressCubit.zipCodeController.text,);
+          zipCode: shippingAddressCubit.zipCodeController.text,
+        isDefault: true);
         await shippingAddressCubit.setShippingAddresses(address);
       }
     }
     return BlocListener<ShippingAddressCubit, ShippingAddressState>(
       listener: (context, state) {
         if(state is ShippingAddressAddedSuccessfully){
-          context.popUntil((route) => route.settings.name == Routes.checkout);
+          context.popUntil((route) => route.settings.name == Routes.checkout,);
         }
       },
       child: Scaffold(

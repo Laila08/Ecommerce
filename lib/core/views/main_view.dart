@@ -1,4 +1,5 @@
 import 'package:ecommerceapp/core/controllers/cart/cart_cubit.dart';
+import 'package:ecommerceapp/core/controllers/checkout/shipping_address/shipping_address_cubit.dart';
 import 'package:ecommerceapp/core/controllers/navigation_controller.dart';
 import 'package:ecommerceapp/core/utils/app_colors.dart';
 import 'package:ecommerceapp/core/controllers/home/home_cubit.dart';
@@ -27,10 +28,17 @@ class MainView extends StatelessWidget {
     final List<Widget> pages = [
       HomeView(),
       CategoryView(),
-      BlocProvider(
+      MultiBlocProvider(
+  providers: [
+    BlocProvider(
         create: (context) => CartCubit()..getCartProducts(),
-        child: BagView(),
-      ),
+),
+    BlocProvider(
+      create: (context) => ShippingAddressCubit()..getShippingAddresses(),
+    ),
+  ],
+  child: BagView(),
+),
       BlocProvider(
         create: (context) => CartCubit()..getCartProducts(),
         child: FavoritesView(),

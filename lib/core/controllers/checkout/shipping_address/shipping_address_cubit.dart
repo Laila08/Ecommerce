@@ -124,48 +124,114 @@ class ShippingAddressCubit extends Cubit<ShippingAddressState> {
       emit(ShippingAddressesFailed(e.toString()));
     }
   }
-
-  Future<void> setShippingAddresses(
-    ShippingAddressModel newShippingAddress,
-  ) async {
+  Future<void> setShippingAddresses(ShippingAddressModel newShippingAddress) async {
     emit(AddingShippingAddress());
+
     final user = authServices.currentUser;
     if (user == null) return;
 
-    await checkoutServices.saveShippingAddresses(user.uid, newShippingAddress);
+    try {
+      await checkoutServices.saveShippingAddresses(user.uid, newShippingAddress);
 
-    final updatedAddresses = await checkoutServices.getShippingAddresses(
-      user.uid,
-    );
-    emit(ShippingAddressesLoaded(shippingAddresses: updatedAddresses));
-    emit(ShippingAddressAddedSuccessfully());
+      await checkoutServices.setDefaultShippingAddress(user.uid, newShippingAddress.id);
+
+      final updatedAddresses = await checkoutServices.getShippingAddresses(user.uid);
+
+      final defaultAddress = updatedAddresses.firstWhere((e) => e.isDefault);
+
+      emit(ShippingAddressesLoaded(
+        shippingAddresses: updatedAddresses,
+        defaultAddress: defaultAddress,
+      ));
+
+      emit(ShippingAddressAddedSuccessfully());
+    } catch (e) {
+      emit(ShippingAddressAddingFailed(e.toString()));
+    }
   }
-
   Future<void> makePreferred(ShippingAddressModel address) async {
     final user = authServices.currentUser;
     if (user == null) return;
-    final currentState = state;
-    if (currentState is ShippingAddressesLoaded) {
-      final addresses = List<ShippingAddressModel>.from(
-        currentState.shippingAddresses,
-      );
-      final updateDefaults = addresses
-          .map(
-            (e) => e.id == address.id
-                ? e.copyWith(isDefault: true)
-                : e.copyWith(isDefault: false),
-          )
-          .toList();
-      final defaultList = updateDefaults.where((e) => e.isDefault).toList();
-      final ShippingAddressModel? defaultAddress =
-      defaultList.isNotEmpty ? defaultList.first : null;
+
+    try {
+      await checkoutServices.setDefaultShippingAddress(user.uid, address.id);
+
+      final updatedAddresses = await checkoutServices.getShippingAddresses(user.uid);
+      final defaultAddress = updatedAddresses.firstWhere((e) => e.isDefault);
 
       emit(
         ShippingAddressesLoaded(
-          shippingAddresses: updateDefaults,
+          shippingAddresses: updatedAddresses,
           defaultAddress: defaultAddress,
         ),
       );
+    } catch (e) {
+      emit(ShippingAddressAddingFailed(e.toString()));
     }
   }
+
+  // Future<void> setShippingAddresses(
+  //   ShippingAddressModel newShippingAddress,
+  // ) async
+  // {
+  //   emit(AddingShippingAddress());
+  //   final user = authServices.currentUser;
+  //   if (user == null) return;
+  //
+  //   await checkoutServices.saveShippingAddresses(user.uid, newShippingAddress);
+  //
+  //   final updatedAddresses =
+  //   await checkoutServices.getShippingAddresses(user.uid);
+  //
+  //   bool existDefault =
+  //   updatedAddresses.any((element) => element.isDefault);
+  //
+  //   if (!existDefault && updatedAddresses.isNotEmpty) {
+  //     updatedAddresses[0] =
+  //         updatedAddresses[0].copyWith(isDefault: true);
+  //   }
+  //
+  //   final defaultAddress =
+  //   updatedAddresses.firstWhere(
+  //         (e) => e.isDefault,
+  //     orElse: () => updatedAddresses.first,
+  //   );
+  //
+  //   emit(
+  //     ShippingAddressesLoaded(
+  //       shippingAddresses: updatedAddresses,
+  //       defaultAddress: defaultAddress,
+  //     ),
+  //   );
+  //
+  //   emit(ShippingAddressAddedSuccessfully());
+  // }
+
+  // Future<void> makePreferred(ShippingAddressModel address) async {
+  //   final user = authServices.currentUser;
+  //   if (user == null) return;
+  //   final currentState = state;
+  //   if (currentState is ShippingAddressesLoaded) {
+  //     final addresses = List<ShippingAddressModel>.from(
+  //       currentState.shippingAddresses,
+  //     );
+  //     final updateDefaults = addresses
+  //         .map(
+  //           (e) => e.id == address.id
+  //               ? e.copyWith(isDefault: true)
+  //               : e.copyWith(isDefault: false),
+  //         )
+  //         .toList();
+  //     final defaultList = updateDefaults.where((e) => e.isDefault).toList();
+  //     final ShippingAddressModel? defaultAddress =
+  //     defaultList.isNotEmpty ? defaultList.first : null;
+  //
+  //     emit(
+  //       ShippingAddressesLoaded(
+  //         shippingAddresses: updateDefaults,
+  //         defaultAddress: defaultAddress,
+  //       ),
+  //     );
+  //   }
+  // }
 }
