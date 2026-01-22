@@ -5,7 +5,7 @@ sealed class FavoriteState {}
 
 final class FavoriteInitial extends FavoriteState {}
 final class FavoriteLoading extends FavoriteState {}
-
+final class FavoriteSorted extends FavoriteState {}
 final class FavoriteSuccess extends FavoriteState {
   final List<ProductModel> favoriteProducts;
   final List<String> catTypes;

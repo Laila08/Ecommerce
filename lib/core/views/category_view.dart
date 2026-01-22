@@ -1,4 +1,4 @@
-import 'package:ecommerceapp/core/views/widgets/category_view_widgets/category_appBar.dart';
+import 'package:ecommerceapp/core/views/widgets/category_view_widgets/category_app_bar.dart';
 import 'package:ecommerceapp/core/views/widgets/category_view_widgets/category_tabs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

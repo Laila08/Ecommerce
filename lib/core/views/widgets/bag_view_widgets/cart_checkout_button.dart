@@ -15,7 +15,10 @@ class CartCheckoutButton extends StatelessWidget {
     final cubit = context.read<ShippingAddressCubit>();
     return MainButton(
       title: "CHECK OUT",
-      onTap: () => context.pushNamed(Routes.checkout,arguments: {'totalPrice':totalPrice,'cubit':cubit}),
+      onTap: () => context.pushNamed(
+        Routes.checkout,
+        arguments: {'totalPrice': totalPrice, 'cubit': cubit},
+      ),
     ).onlyPadding(bottomPadding: 20);
   }
 }

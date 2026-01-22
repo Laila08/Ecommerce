@@ -1,4 +1,3 @@
-import 'package:ecommerceapp/core/components/widgets/favorite_icon_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -7,7 +6,7 @@ import '../../../../extensions/app_extentions.dart';
 import '../../../../models/cart_model.dart';
 import '../../../../theme/app_text_styles.dart';
 import '../../../../utils/app_colors.dart';
-import '../../circle_icon_widget.dart';
+import '../../../../components/widgets/circle_icon_widget.dart';
 
 class QuantityControl extends StatelessWidget {
   final CartModel product;

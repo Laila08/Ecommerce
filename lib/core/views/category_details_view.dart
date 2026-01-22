@@ -1,4 +1,4 @@
-import 'package:ecommerceapp/core/views/widgets/category_details_view_widgets/category_details_appBar.dart';
+import 'package:ecommerceapp/core/views/widgets/category_details_view_widgets/category_details_app_bar.dart';
 import 'package:ecommerceapp/core/views/widgets/category_details_view_widgets/category_header.dart';
 import 'package:ecommerceapp/core/views/widgets/category_details_view_widgets/category_products_list.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +25,11 @@ class CategoryDetailsView extends StatelessWidget {
       appBar: const CategoryDetailsAppBar(),
       body: Column(
         children: [
-          CategoryHeader(catName: catName, gender: gender, catTypesList: catTypesList),
+          CategoryHeader(
+            catName: catName,
+            gender: gender,
+            catTypesList: catTypesList,
+          ),
           const CategoryProductsList(),
         ],
       ),

@@ -5,8 +5,8 @@ import 'package:ecommerceapp/core/extensions/app_extentions.dart';
 import 'package:ecommerceapp/core/theme/app_text_styles.dart';
 import 'package:ecommerceapp/core/utils/app_colors.dart';
 import 'package:ecommerceapp/core/models/product_model.dart';
-import 'package:ecommerceapp/core/views/widgets/product_badge_widget.dart';
-import 'package:ecommerceapp/core/views/widgets/rating_widget.dart';
+import 'package:ecommerceapp/core/components/widgets/product_badge_widget.dart';
+import 'package:ecommerceapp/core/components/widgets/rating_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

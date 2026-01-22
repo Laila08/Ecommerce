@@ -10,5 +10,4 @@ abstract class AppColors {
   static const Color errorColor = Color(0xffF01F0E);
   static const Color successColor = Color(0xff2AA952);
   static const Color starColor = Color(0xffFFBA49);
-
 }

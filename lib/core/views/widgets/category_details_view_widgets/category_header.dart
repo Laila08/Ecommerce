@@ -1,4 +1,6 @@
+import 'package:ecommerceapp/core/controllers/category_details/category_details_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../components/widgets/title_header_widget.dart';
 import '../../../utils/app_colors.dart';
@@ -19,6 +21,7 @@ class CategoryHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<CategoryDetailsCubit>();
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -38,7 +41,7 @@ class CategoryHeader extends StatelessWidget {
           catTypesList.isEmpty
               ? SizedBox()
               : CategoryTypesList(gender: gender, catTypesList: catTypesList),
-          const ProductFiltersRow(),
+          ProductFiltersRow(sortCubit: cubit.sortCubit),
         ],
       ),
     );

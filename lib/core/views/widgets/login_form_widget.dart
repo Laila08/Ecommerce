@@ -9,11 +9,11 @@ import 'package:ecommerceapp/core/utils/app_messages.dart';
 import 'package:ecommerceapp/core/theme/app_text_styles.dart';
 import 'package:ecommerceapp/core/theme/app_validator.dart';
 import 'package:ecommerceapp/core/controllers/auth/auth_cubit.dart';
-import 'package:ecommerceapp/core/views/widgets/social_widget.dart';
+import 'package:ecommerceapp/core/components/widgets/social_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'action_text_widget.dart';
-import 'suffix_icon_widget.dart';
+import '../../components/widgets/suffix_icon_widget.dart';
 
 class LoginFormWidget extends StatelessWidget {
   const LoginFormWidget({super.key});

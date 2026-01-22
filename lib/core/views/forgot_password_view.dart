@@ -8,9 +8,9 @@ import 'package:ecommerceapp/core/theme/app_validator.dart';
 import 'package:ecommerceapp/core/controllers/auth/auth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 
-import 'widgets/suffix_icon_widget.dart';
+import '../components/widgets/suffix_icon_widget.dart';
+import '../utils/app_messages.dart';
 
 class ForgotPasswordView extends StatefulWidget {
   const ForgotPasswordView({super.key});
@@ -34,12 +34,10 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
         bloc: authCubit,
         builder: (context, state) {
           bool? isValidEmail;
-          bool? isValidPassword;
           AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
 
           if (state is AuthFormState) {
             isValidEmail = state.isValidEmail;
-            isValidPassword = state.isValidPassword;
             autovalidateMode = state.autovalidateMode;
           }
           return Column(
@@ -50,7 +48,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                   "Forgot password", style: AppTextStyles.font34BlackWeight700),
               73.verticalSizedBox,
               Text(
-                "Please, enter your email address. You will receive \na link to create a new password via email.",
+                AppMessages.emailMessage,
                 style: AppTextStyles.font14blackWeight500,
               ).onlyPadding(bottomPadding: 20),
               Expanded(

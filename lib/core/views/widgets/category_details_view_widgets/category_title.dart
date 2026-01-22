@@ -10,7 +10,9 @@ class CategoryTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(title, style: AppTextStyles.font34BlackWeight700)
-        .onlyPadding(leftPadding: 16, topPadding: 16, bottomPadding: 8);
+    return Text(
+      title,
+      style: AppTextStyles.font34BlackWeight700,
+    ).onlyPadding(leftPadding: 16, topPadding: 16, bottomPadding: 8);
   }
 }

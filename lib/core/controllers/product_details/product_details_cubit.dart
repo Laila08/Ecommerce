@@ -62,6 +62,7 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
         productImage: product.productImage,
         size: size!,
         color: color!,
+        createdAt: product.createdAt
       );
       await cartServices.addProductToCart(currentUser!.uid, newProduct);
       emit(AddedToCart());

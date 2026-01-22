@@ -3,21 +3,19 @@ import '../../../utils/products_list_type.dart';
 
 class CategoryProductsHelper {
   static List<ProductModel> getProductsByCategory(
-      List<ProductModel> products,
-      ProductsListType category,
-      ) {
+    List<ProductModel> products,
+    ProductsListType category,
+  ) {
     if (category.name == 'New') {
       return _getNewProducts(products);
     }
-    return products
-        .where((e) => e.productCategory == category.name)
-        .toList();
+    return products.where((e) => e.productCategory == category.name).toList();
   }
 
   static List<String> getCategoryTypes(
-      List<ProductModel> products,
-      ProductsListType category,
-      ) {
+    List<ProductModel> products,
+    ProductsListType category,
+  ) {
     return products
         .where((e) => e.productCategory == category.name)
         .map((e) => e.catType)
@@ -32,5 +30,4 @@ class CategoryProductsHelper {
       return now.difference(createdDate).inDays <= 7;
     }).toList();
   }
-
 }

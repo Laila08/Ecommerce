@@ -18,9 +18,8 @@ class ProductPrice extends StatelessWidget {
         Text(
           "${product.productPrice * product.quantity}\$",
           style: AppTextStyles.font14blackWeight500,
-        ).onlyPadding(topPadding: 15,rightPadding: 20),
+        ).onlyPadding(topPadding: 15, rightPadding: 20),
       ],
     ).onlyPadding(topPadding: 5);
   }
 }
-

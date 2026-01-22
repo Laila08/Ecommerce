@@ -7,21 +7,17 @@ import '../../../../controllers/favorite/favorite_cubit.dart';
 import '../../../../utils/app_colors.dart';
 import '../../../../utils/product_option.dart';
 
-class CartPopupMenu  extends StatelessWidget {
+class CartPopupMenu extends StatelessWidget {
   final CartModel product;
   const CartPopupMenu({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
-    return  PopupMenuButton<ProductOption>(
+    return PopupMenuButton<ProductOption>(
       icon: const Icon(Icons.more_vert, color: AppColors.grayColor),
       color: AppColors.whiteColor,
-      constraints: const BoxConstraints(
-        maxWidth: 170,
-      ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
+      constraints: const BoxConstraints(maxWidth: 170),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       onSelected: (option) {
         switch (option) {
           case ProductOption.addToFavorites:

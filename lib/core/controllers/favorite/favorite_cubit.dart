@@ -1,18 +1,34 @@
-import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ecommerceapp/core/controllers/home/home_cubit.dart';
+import 'dart:async';
+
 import 'package:ecommerceapp/core/models/cart_model.dart';
 import 'package:ecommerceapp/core/services/auth_services.dart';
-import 'package:ecommerceapp/core/services/cart_services.dart';
 import 'package:ecommerceapp/core/services/favorite_services.dart';
 import 'package:ecommerceapp/core/models/product_model.dart';
 import 'package:ecommerceapp/core/services/home_services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+
+import '../sort/sort_cubit.dart';
 
 part 'favorite_state.dart';
 
 class FavoriteCubit extends Cubit<FavoriteState> {
-  FavoriteCubit() : super(FavoriteInitial());
+  final SortCubit sortCubit = SortCubit();
+  late final StreamSubscription<int> _sortSubscription;
+  FavoriteCubit() : super(FavoriteInitial()) {
+    _sortSubscription = sortCubit.stream.listen((_) {
+      final currentState = state;
+      if (currentState is FavoriteSuccess) {
+        emit(
+          FavoriteSuccess(
+            favoriteProducts: currentState.favoriteProducts,
+            catTypes: currentState.catTypes,
+            selectedCatType: currentState.selectedCatType,
+          ),
+        );
+      }
+    });
+  }
   final authServices = AuthServicesImp();
   final favoriteServices = FavoriteServicesImp();
   final homeServices = HomeServicesImp();
@@ -32,6 +48,45 @@ class FavoriteCubit extends Cubit<FavoriteState> {
     } catch (e) {
       emit(FavoriteFailed(e.toString()));
     }
+  }
+  @override
+  Future<void> close() {
+    _sortSubscription.cancel();
+    return super.close();
+  }
+  List<ProductModel> get sortedProducts {
+    final currentState = state;
+    if (currentState is! FavoriteSuccess) return [];
+
+    List<ProductModel> products =
+    currentState.selectedCatType == null
+        ? List.from(currentState.favoriteProducts)
+        : currentState.favoriteProducts
+        .where((p) => p.catType == currentState.selectedCatType)
+        .toList();
+
+    switch (sortCubit.state) {
+      case 1:
+        products.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+        break;
+      case 2:
+        products.sort(
+              (a, b) =>
+              (b.productRate ?? 0).compareTo(a.productRate ?? 0),
+        );
+        break;
+      case 3:
+        products.sort(
+              (a, b) => a.productPrice.compareTo(b.productPrice),
+        );
+        break;
+      case 4:
+        products.sort(
+              (a, b) => b.productPrice.compareTo(a.productPrice),
+        );
+        break;
+    }
+    return products;
   }
 
   void clearSelectedCatType() {

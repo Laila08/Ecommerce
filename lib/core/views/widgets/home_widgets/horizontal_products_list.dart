@@ -19,16 +19,18 @@ class HorizontalProductsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final heigh = context.heigh;
+    final length = products.length;
+
     return SizedBox(
       height: heigh * 0.36,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: products.length,
+        itemCount: length,
         itemBuilder: (BuildContext context, int index) => ProductItem(
           product: products[index],
           color: color,
           listType: listType,
-        ),
+        ).onlyPadding(rightPadding: index + 1 == length ? 16 : 0),
       ),
     );
   }

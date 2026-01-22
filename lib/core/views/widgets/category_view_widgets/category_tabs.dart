@@ -1,6 +1,6 @@
+import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 
 import '../../../controllers/category/category_cubit.dart';
 import '../../../theme/app_text_styles.dart';
@@ -15,7 +15,6 @@ class CategoryTabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final categoryCubit = context.read<CategoryCubit>();
-
     return Container(
       color: AppColors.backGroundColor,
       width: double.infinity,
@@ -28,7 +27,7 @@ class CategoryTabs extends StatelessWidget {
           labelColor: AppColors.blackColor,
           labelStyle: AppTextStyles.font16BlackWeight400,
         ),
-        tabs: const [Text('Women'), Text('Men'), Text('Kids')],
+        tabs: _tabs.map((gender) => Text(gender)).toList(),
         views: _tabs.map((gender) {
           return CategoryListWidget(
             gender: gender,

@@ -20,7 +20,7 @@ class RatingWidget extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             return Icon(Icons.star,color: AppColors.starColor);
           },
-        ),Text("(10)",style: AppTextStyles.font10GrayWeight400,),
+        ),Text("(${product.productRate})",style: AppTextStyles.font10GrayWeight400,),
       ],
     );
   }

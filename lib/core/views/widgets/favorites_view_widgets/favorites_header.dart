@@ -44,7 +44,7 @@ class FavoritesHeader extends StatelessWidget {
                   state: state,
                   favoriteCubit: favoriteCubit,
                 ),
-          ProductFiltersRow(),
+          ProductFiltersRow(sortCubit: favoriteCubit.sortCubit,),
         ],
       ),
     );

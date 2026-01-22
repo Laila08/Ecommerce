@@ -9,5 +9,6 @@ abstract class Routes {
   static const String checkout ='checkout';
   static const String shippingAddresses ='shippingAddresses';
   static const String setShippingAddresses ='setShippingAddresses';
+  static const String editAddress ='editAddress';
 
 }

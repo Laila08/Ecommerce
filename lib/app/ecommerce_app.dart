@@ -5,6 +5,8 @@ import 'package:ecommerceapp/core/controllers/auth/auth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../core/controllers/navigation/navigation_cubit.dart';
+import '../core/controllers/view_mode/view_mode_cubit.dart';
 import '../core/routes/app_router.dart';
 
 class EcommerceApp extends StatelessWidget {
@@ -22,6 +24,8 @@ class EcommerceApp extends StatelessWidget {
         BlocProvider(
           create: (context) => FavoriteCubit()..getFavorites(),
         ),
+        BlocProvider(create: (context) => ViewModeCubit()),
+        BlocProvider(create: (_) => NavigationCubit()),
       ],
       child: Builder(
           builder: (context) {
@@ -30,7 +34,6 @@ class EcommerceApp extends StatelessWidget {
               buildWhen: (previous, current) =>
               current is AuthSuccess ||
                   current is AuthLoading ||
-                  ////////////////////////////////////////////////////////////////////// AuthFailed ما ضافها
                   current is AuthFailed ||
                   current is AuthInitial,
               builder: (context, state) {

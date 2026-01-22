@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class CartModel {
   final String cartId;
   final String productId;
@@ -8,7 +10,7 @@ class CartModel {
   final int productDiscount;
   final String size;
   final String color;
-
+  final Timestamp? createdAt;
   CartModel({
     required this.productId,
     required this.productImage,
@@ -19,6 +21,7 @@ class CartModel {
     required this.size,
     this.color = "Black",
     required this.cartId,
+    this.createdAt,
   });
 
   Map<String, dynamic> toMap() {
@@ -32,6 +35,7 @@ class CartModel {
       'productDiscount': productDiscount,
       'size': size,
       'color': color,
+      'createdAt':createdAt??Timestamp.now(),
     };
   }
 
@@ -46,6 +50,7 @@ class CartModel {
       size: map['size'] as String,
       color: map['color'] as String,
       cartId: map['cartId'] as String,
+      createdAt: map['createdAt'] as Timestamp? ??Timestamp.now(),
     );
   }
 
@@ -59,6 +64,7 @@ class CartModel {
     int? productDiscount,
     String? size,
     String? color,
+    Timestamp? createdAt
   }) {
     return CartModel(
       cartId: cartId ?? this.cartId,
@@ -70,6 +76,7 @@ class CartModel {
       productDiscount: productDiscount ?? this.productDiscount,
       size: size ?? this.size,
       color: color ?? this.color,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 }

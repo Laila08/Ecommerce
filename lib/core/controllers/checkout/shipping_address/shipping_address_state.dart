@@ -18,6 +18,7 @@ final class ShippingAddressesLoaded extends ShippingAddressState {
     this.defaultAddress,
   });
 }
+final class CountryTextStyleChanged extends ShippingAddressState {}
 
 final class ShippingAddressesFailed extends ShippingAddressState {
   final String error;
@@ -37,7 +38,17 @@ final class ShippingAddressAddingFailed extends ShippingAddressState {
 
   ShippingAddressAddingFailed(this.error);
 }
+final class EditingShippingAddress extends ShippingAddressState {}
 
+final class ShippingAddressEdited extends ShippingAddressState {}
+
+final class ShippingAddressEditedSuccessfully extends ShippingAddressState {}
+
+final class ShippingAddressEditingFailed extends ShippingAddressState {
+  final String error;
+
+  ShippingAddressEditingFailed(this.error);
+}
 final class MakingPreferred extends ShippingAddressState {}
 
 final class PreferredMade extends ShippingAddressState {}

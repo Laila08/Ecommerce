@@ -14,11 +14,14 @@ class MainButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool hasChild = child != null && title == null;
+
     return InkWell(
       onTap: onTap,
       child: Container(
-        width: double.infinity,
-        padding: 14.vPading,
+        alignment: Alignment.center,
+        width:  hasChild ? 100 : double.infinity,
+        padding:title != null ? 14.vPading : 0.vPading,
         decoration: BoxDecoration(
           borderRadius: 25.allBorderRadius,
           color: AppColors.primaryColor,

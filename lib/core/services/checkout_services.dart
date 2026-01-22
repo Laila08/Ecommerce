@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import '../models/delivery_method_model.dart';
 import '../models/shipping_address.dart';
 import '../utils/api_path.dart';
@@ -23,10 +21,12 @@ class CheckoutServicesImpl implements CheckoutServices {
     String addressId,
   ) async {
     final addresses = await getShippingAddresses(userId);
+
     for (final address in addresses) {
+      final isDefault = address.id == addressId;
       await saveShippingAddresses(
         userId,
-        address.copyWith(isDefault: address.id == addressId),
+        address.copyWith(isDefault: isDefault),
       );
     }
   }
@@ -59,4 +59,8 @@ class CheckoutServicesImpl implements CheckoutServices {
       data: shippingAddress.toMap(),
     );
   }
+
+
+
+
 }

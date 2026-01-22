@@ -5,6 +5,8 @@ import '../../utils/app_colors.dart';
 import '../../theme/app_text_styles.dart';
 
 class AppTextField extends StatelessWidget {
+  final VoidCallback? onTap;
+  final bool readOnly;
   final String labelText;
   final TextInputType? keyboardType;
   final TextEditingController? controller;
@@ -16,6 +18,7 @@ class AppTextField extends StatelessWidget {
   final ValueChanged<String> onChangedFunction;
   final TextStyle hintStyle;
   AutovalidateMode? autovalidateMode;
+
   AppTextField({
     super.key,
     required this.labelText,
@@ -28,7 +31,9 @@ class AppTextField extends StatelessWidget {
     this.onEditingCompleteFun,
     required this.textInputAction,
     required this.onChangedFunction,
-     this.hintStyle =AppTextStyles.font14WhiteWeight500,
+    this.hintStyle = AppTextStyles.font14WhiteWeight500,
+    this.onTap,
+    this.readOnly = false,
   });
   @override
   Widget build(BuildContext context) {
@@ -44,7 +49,8 @@ class AppTextField extends StatelessWidget {
         ],
       ),
       child: TextFormField(
-
+        readOnly: readOnly,
+        onTap: onTap,
         controller: controller,
         focusNode: focusNodeType,
         onEditingComplete: () {
@@ -55,8 +61,8 @@ class AppTextField extends StatelessWidget {
         style: AppTextStyles.font14blackWeight500,
         cursorColor: AppColors.blackColor,
         keyboardType: keyboardType,
-        onChanged:onChangedFunction,
-        autovalidateMode:autovalidateMode,
+        onChanged: onChangedFunction,
+        autovalidateMode: autovalidateMode,
         validator: (x) => validator(x),
         textInputAction: textInputAction,
         decoration: InputDecoration(
@@ -64,8 +70,7 @@ class AppTextField extends StatelessWidget {
           fillColor: AppColors.whiteColor,
           filled: true,
           hintText: labelText,
-
-          hintStyle:hintStyle,
+          hintStyle: hintStyle,
           suffixIcon: suffixIcon,
           floatingLabelBehavior: FloatingLabelBehavior.auto,
           floatingLabelStyle: TextStyle(backgroundColor: AppColors.whiteColor),

@@ -6,10 +6,7 @@ import '../../../models/cart_model.dart';
 class CartProductsList extends StatelessWidget {
   final List<CartModel> products;
 
-  const CartProductsList({
-    super.key,
-    required this.products,
-  });
+  const CartProductsList({super.key, required this.products});
 
   @override
   Widget build(BuildContext context) {

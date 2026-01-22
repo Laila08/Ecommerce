@@ -29,7 +29,6 @@ class FavoritesBody extends StatelessWidget {
               return FailedStateWidget(text:state.error,);
             } else if (state is FavoriteSuccess) {
               return FavoritesSuccessContent(
-                state: state,
                 favoriteCubit: favoriteCubit,
               );
             } else {
