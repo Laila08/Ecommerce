@@ -13,13 +13,11 @@ class CartItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cartCubit = context.read<CartCubit>();
     final width = context.width;
 
     return CartItemCard(
       width: width,
       product: product,
-      cartCubit: cartCubit,
     ).onlyPadding(topPadding: 25);
   }
 }

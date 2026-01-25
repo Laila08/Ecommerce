@@ -6,7 +6,7 @@ import '../../../../controllers/favorite/favorite_cubit.dart';
 import '../../../../controllers/product_details/product_details_cubit.dart';
 import '../../../../extensions/app_extentions.dart';
 import '../../../../models/product_model.dart';
-import '../../drop_down_widget.dart';
+import '../drop_down_widget.dart';
 
 class ProductOptionsRow extends StatelessWidget {
   final ProductModel product;

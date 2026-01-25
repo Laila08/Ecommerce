@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../controllers/cart/cart_cubit.dart';
 import '../../../extensions/app_extentions.dart';
+import 'bag_loading_shimmer.dart';
 import 'bag_success_content.dart';
 
 class BagBlocContent extends StatelessWidget {
@@ -10,17 +11,20 @@ class BagBlocContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('🟥 UI CartCubit hash = ${context.read<CartCubit>().hashCode}');
+
     final cartCubit = context.read<CartCubit>();
 
     return BlocBuilder<CartCubit, CartState>(
       bloc: cartCubit,
-      buildWhen: (previous, current) =>
-          current is CartILoading ||
-          current is CartISuccess ||
-          current is CartIFailed,
+      // buildWhen: (previous, current) =>
+      //     current is CartILoading ||
+      //     current is CartISuccess ||
+      //     current is CartIFailed,
       builder: (context, state) {
+        print('🧩 UI RECEIVED state = ${state.runtimeType}');
         if (state is CartILoading) {
-          return CircularProgressIndicator().center();
+          return const BagLoadingShimmer();
         } else if (state is CartIFailed) {
           return Text(state.error).center();
         } else if (state is CartISuccess) {

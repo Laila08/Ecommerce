@@ -9,10 +9,11 @@ import '../../../../utils/product_option.dart';
 
 class CartPopupMenu extends StatelessWidget {
   final CartModel product;
-  const CartPopupMenu({super.key, required this.product});
+  const CartPopupMenu({super.key, required this.product });
 
   @override
   Widget build(BuildContext context) {
+    print('🟥 CartCubit hash = ${context.read<CartCubit>().hashCode}');
     return PopupMenuButton<ProductOption>(
       icon: const Icon(Icons.more_vert, color: AppColors.grayColor),
       color: AppColors.whiteColor,
@@ -25,8 +26,8 @@ class CartPopupMenu extends StatelessWidget {
             favoriteCubit.addToFavorite(product);
             break;
           case ProductOption.delete:
-            final cartCubit = context.read<CartCubit>();
-            cartCubit.removeFromCarts(product);
+            //final cartCubit = context.read<CartCubit>();
+            context.read<CartCubit>().removeFromCarts(product);
             break;
         }
       },

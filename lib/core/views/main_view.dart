@@ -1,5 +1,4 @@
 import 'package:ecommerceapp/core/controllers/cart/cart_cubit.dart';
-import 'package:ecommerceapp/core/controllers/checkout/shipping_address/shipping_address_cubit.dart';
 import 'package:ecommerceapp/core/utils/app_colors.dart';
 import 'package:ecommerceapp/core/views/profile_view.dart';
 import 'package:flutter/material.dart';
@@ -19,27 +18,21 @@ class MainView extends StatelessWidget {
     final navCubit = context.read<NavigationCubit>();
     final int? initialIndex =
         ModalRoute.of(context)?.settings.arguments as int?;
-    if (initialIndex != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (initialIndex != null && navCubit.state == 0) {
         navCubit.changeIndex(initialIndex);
-      });
-    }
+      }
+    });
+
     final List<Widget> pages = [
       HomeView(),
       CategoryView(),
-      MultiBlocProvider(
-        providers: [
-          BlocProvider(create: (context) => CartCubit()..getCartProducts()),
-          BlocProvider(
-            create: (context) => ShippingAddressCubit()..getShippingAddresses(),
-          ),
-        ],
-        child: BagView(),
-      ),
-      BlocProvider(
-        create: (context) => CartCubit()..getCartProducts(),
-        child: FavoritesView(),
-      ),
+      // BlocProvider(
+      //   create: (_) => CartCubit()..getCartProducts(),
+      //   child: BagView(),
+      // ),
+      BagView(),
+      FavoritesView(),
       ProfileView(),
     ];
 

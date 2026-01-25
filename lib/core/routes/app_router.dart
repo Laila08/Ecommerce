@@ -13,7 +13,9 @@ import 'package:ecommerceapp/core/views/editing_address_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import '../controllers/cart/cart_cubit.dart';
 import '../controllers/category_details/category_details_cubit.dart';
+import '../controllers/navigation/navigation_cubit.dart';
 import '../controllers/navigation_controller.dart';
 import '../views/forgot_password_view.dart';
 import '../views/login_view.dart';
@@ -112,14 +114,15 @@ abstract class AppRouter {
         );
       case Routes.homepage:
         return CupertinoPageRoute(
-          builder: (_) => MultiProvider(
+          builder: (_) => MultiBlocProvider(
             providers: [
-              ChangeNotifierProvider(create: (_) => NavigationController()),
-              BlocProvider<HomeCubit>(
-                create: (_) => HomeCubit()..getHomeProducts(),
-              ),
+              //BlocProvider(create: (_) => HomeCubit()..getHomeProducts()),
+              BlocProvider(create: (_) => NavigationCubit()),
+              // BlocProvider(
+              //   create: (_) => ShippingAddressCubit()..getShippingAddresses(),
+              // ),
             ],
-            child: MainView(),
+            child: const MainView(),
           ),
           settings: settings,
         );

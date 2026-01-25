@@ -31,7 +31,7 @@ class AppTextField extends StatelessWidget {
     this.onEditingCompleteFun,
     required this.textInputAction,
     required this.onChangedFunction,
-    this.hintStyle = AppTextStyles.font14WhiteWeight500,
+    this.hintStyle = AppTextStyles.font14GrayWeight500,
     this.onTap,
     this.readOnly = false,
   });

@@ -7,8 +7,9 @@ class ArrowBackIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(onPressed:(){
-      context.pop();
-    }, icon: const Icon(Icons.arrow_back_ios,color: AppColors.blackColor,));
+    return InkWell(
+      onTap: ()=>context.pop(),
+      child: const Icon(Icons.arrow_back_ios,color: AppColors.blackColor,),
+    );
   }
 }

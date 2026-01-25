@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../components/widgets/failed_state_widget.dart';
 import '../../../controllers/favorite/favorite_cubit.dart';
 import '../../../extensions/app_extentions.dart';
+import 'favorites_loading_shimmer.dart';
 import 'favorites_success_content.dart';
 
 class FavoritesBody extends StatelessWidget {
@@ -24,7 +25,7 @@ class FavoritesBody extends StatelessWidget {
               current is FavoriteFailed,
           builder: (context, state) {
             if (state is FavoriteLoading) {
-              return CircularProgressIndicator().center();
+              return const FavoritesLoadingShimmer();
             } else if (state is FavoriteFailed) {
               return FailedStateWidget(text:state.error,);
             } else if (state is FavoriteSuccess) {

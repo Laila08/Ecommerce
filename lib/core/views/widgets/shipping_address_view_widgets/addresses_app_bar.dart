@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../controllers/checkout/shipping_address/shipping_address_cubit.dart';
-import '../../../extensions/app_extentions.dart';
-import '../../../routes/routes.dart';
 import '../../../theme/app_text_styles.dart';
 import '../../../utils/app_colors.dart';
 
@@ -18,10 +16,7 @@ class AddressesAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: AppColors.whiteColor,
       leading: IconButton(
         onPressed: () {
-          context.pushNamed(
-            Routes.checkout,
-            arguments: {'totalPrice': totalPrice, 'cubit': shippingAddressCubit},
-          );
+          Navigator.pop(context);
         },
         icon: Icon(Icons.arrow_back_ios),
       ),

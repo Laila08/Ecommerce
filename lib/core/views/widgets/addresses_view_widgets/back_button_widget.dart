@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../controllers/checkout/shipping_address/shipping_address_cubit.dart';
 import '../../../extensions/app_extentions.dart';
-import '../../../routes/routes.dart';
 
 class BackButtonWidget extends StatelessWidget {
   final ShippingAddressCubit shippingAddressCubit;
@@ -17,11 +16,8 @@ class BackButtonWidget extends StatelessWidget {
             state.shippingAddresses.isNotEmpty) {
           context.pop();
         } else {
-          context.pushNamedAndRemoveUntil(
-            Routes.homepage,
-            arguments: 2,
-            predicate: (route) => false,
-          );
+          Navigator.pop(context);
+         // context.pop();
         }
       },
       icon: Icon(Icons.arrow_back_ios),

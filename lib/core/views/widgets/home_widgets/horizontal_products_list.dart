@@ -23,7 +23,7 @@ class HorizontalProductsList extends StatelessWidget {
 
     return SizedBox(
       height: heigh * 0.36,
-      child: ListView.builder(
+      child: products.isEmpty?Text("There is no product").center():ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: length,
         itemBuilder: (BuildContext context, int index) => ProductItem(

@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 
-import '../../utils/sort_type.dart';
-
 part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
@@ -14,33 +12,6 @@ class HomeCubit extends Cubit<HomeState> {
   List<ProductModel>? filteredProducts;
   String? selectedCatType;
 
-  void sortProducts(SortType sortType) {
-    List<ProductModel> productsToSort = filteredProducts ?? currentProducts;
-    switch (sortType) {
-      case SortType.priceHighToLow:
-        productsToSort.sort((a, b) => b.productPrice.compareTo(a.productPrice));
-        break;
-      case SortType.priceLowToHigh:
-        productsToSort.sort((a, b) => a.productPrice.compareTo(b.productPrice));
-        break;
-      case SortType.customerReview:
-        productsToSort.sort(
-          (a, b) => (b.productRate ?? 0).compareTo(a.productRate ?? 0),
-        );
-        break;
-      case SortType.newest:
-        productsToSort.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-        break;
-      case SortType.popular:
-        break;
-    }
-    if (filteredProducts != null) {
-      filteredProducts = productsToSort;
-    } else {
-      currentProducts = productsToSort;
-    }
-    emit(FilteredSuccess());
-  }
 
   void setCurrentProducts(List<ProductModel> products) {
     currentProducts = products;
@@ -77,6 +48,7 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> getHomeProducts() async {
+    if (isClosed) return;
     emit(HomeLoading());
     try {
       final now = DateTime.now();
@@ -101,7 +73,7 @@ class HomeCubit extends Cubit<HomeState> {
       final newMenProduct = getNewProducts(menProducts, "Men", now);
       final newWomenProduct = getNewProducts(womenProducts, "Women", now);
       final newKidsProduct = getNewProducts(kidsProducts, "Kids", now);
-
+      if (isClosed) return;
       emit(
         HomeSuccess(
           salesProducts: salesProducts,
@@ -115,6 +87,7 @@ class HomeCubit extends Cubit<HomeState> {
         ),
       );
     } catch (e) {
+      if (isClosed) return;
       emit(HomeFailed(e.toString()));
     }
   }

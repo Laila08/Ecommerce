@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../components/widgets/main_button.dart';
 import '../../../extensions/app_extentions.dart';
+import '../../../models/cart_model.dart';
 import '../../../routes/routes.dart';
 
 class CartCheckoutButton extends StatelessWidget {

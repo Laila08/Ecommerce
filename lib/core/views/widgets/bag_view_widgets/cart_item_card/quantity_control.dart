@@ -10,12 +10,10 @@ import '../../../../components/widgets/circle_icon_widget.dart';
 
 class QuantityControl extends StatelessWidget {
   final CartModel product;
-  final CartCubit cartCubit;
 
   const QuantityControl({
     super.key,
     required this.product,
-    required this.cartCubit,
   });
 
   @override
@@ -23,7 +21,7 @@ class QuantityControl extends StatelessWidget {
     return Row(
       children: [
         BlocBuilder<CartCubit, CartState>(
-          bloc: cartCubit,
+          bloc: context.read<CartCubit>(),
           buildWhen: (previous, current) =>
               current is CartISuccess ||
               current is CartILoading ||
@@ -35,7 +33,7 @@ class QuantityControl extends StatelessWidget {
             return CircleIconWidget(
               icon: Icons.minimize,
               color: AppColors.grayColor,
-              onTap: () => cartCubit.oddQuantity(product),
+              onTap: () => context.read<CartCubit>().oddQuantity(product),
             );
           },
         ),
@@ -48,7 +46,7 @@ class QuantityControl extends StatelessWidget {
         CircleIconWidget(
           icon: Icons.add,
           color: AppColors.grayColor,
-          onTap: () => cartCubit.addQuantity(product),
+          onTap: () => context.read<CartCubit>().addQuantity(product),
         ),
       ],
     ).onlyPadding(topPadding: 12);

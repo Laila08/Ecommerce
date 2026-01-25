@@ -9,13 +9,10 @@ import 'quantity_control.dart';
 
 class ProductInfo extends StatelessWidget {
   final CartModel product;
-  final CartCubit cartCubit;
 
   const ProductInfo({
     super.key,
-    required this.product,
-    required this.cartCubit,
-  });
+    required this.product,});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +21,7 @@ class ProductInfo extends StatelessWidget {
       children: [
         ProductName(name: product.productName),
         ProductAttributes(color: product.color, size: product.size),
-        QuantityControl(product: product, cartCubit: cartCubit),
+        QuantityControl(product: product),
       ],
     ).onlyPadding(topPadding: 8, leftPadding: 15);
   }

@@ -1,3 +1,4 @@
+import 'package:ecommerceapp/core/extensions/app_extentions.dart';
 import 'package:flutter/material.dart';
 import '../../../models/cart_model.dart';
 import 'cart_checkout_button.dart';
@@ -16,7 +17,7 @@ class CartListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return products.isEmpty?Text("There is no product").center():SingleChildScrollView(
       child: Column(
         children: [
           CartProductsList(products: products),

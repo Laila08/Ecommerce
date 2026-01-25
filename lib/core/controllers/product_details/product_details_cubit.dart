@@ -55,14 +55,14 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
         return;
       }
       final newProduct = CartModel(
-        cartId: documentidFromLocalData(),
-        productName: product.productName,
-        productPrice: product.productPrice,
-        productId: product.productId,
-        productImage: product.productImage,
-        size: size!,
-        color: color!,
-        createdAt: product.createdAt
+          cartId: documentidFromLocalData(),
+          productName: product.productName,
+          productPrice: product.productPrice,
+          productId: product.productId,
+          productImage: product.productImage,
+          size: size!,
+          color: color!,
+          createdAt: product.createdAt
       );
       await cartServices.addProductToCart(currentUser!.uid, newProduct);
       emit(AddedToCart());
@@ -71,13 +71,13 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
     }
   }
 
-  // Future<void> toggleFavorite(ProductModel product) async {
-  //   try {
-  //     final currentUser = authServices.currentUser;
-  //     final updatedProduct = await favoriteServices.toggleFavorite(currentUser!.uid, product);
-  //     emit(ProductDetailsLoaded(updatedProduct));
-  //   } catch (e) {
-  //     emit(ProductDetailsError(e.toString()));
-  //   }
-  // }
+// Future<void> toggleFavorite(ProductModel product) async {
+//   try {
+//     final currentUser = authServices.currentUser;
+//     final updatedProduct = await favoriteServices.toggleFavorite(currentUser!.uid, product);
+//     emit(ProductDetailsLoaded(updatedProduct));
+//   } catch (e) {
+//     emit(ProductDetailsError(e.toString()));
+//   }
+// }
 }

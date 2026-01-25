@@ -14,7 +14,7 @@ class CartProductsList extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: products.length,
-      itemBuilder: (context, index) => CartItem(product: products[index]),
+      itemBuilder: (context, index) => products.isEmpty?Text("There is no product"):CartItem(product: products[index]),
     );
   }
 }

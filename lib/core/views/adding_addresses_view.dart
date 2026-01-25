@@ -45,7 +45,7 @@ class AddingAddressesView extends StatelessWidget {
     return BlocListener<ShippingAddressCubit, ShippingAddressState>(
       listener: (context, state) {
         if (state is ShippingAddressAddedSuccessfully) {
-          context.popUntil((route) => route.settings.name == Routes.checkout);
+          Navigator.pop(context, true);
         }
       },
       child: Scaffold(
@@ -82,4 +82,3 @@ class AddingAddressesView extends StatelessWidget {
     );
   }
 }
-

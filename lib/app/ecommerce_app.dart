@@ -1,13 +1,16 @@
-import 'package:ecommerceapp/core/controllers/favorite/favorite_cubit.dart';
-import 'package:ecommerceapp/core/routes/routes.dart';
-import 'package:ecommerceapp/core/utils/app_colors.dart';
-import 'package:ecommerceapp/core/controllers/auth/auth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../core/controllers/auth/auth_cubit.dart';
+import '../core/controllers/cart/cart_cubit.dart';
+import '../core/controllers/checkout/shipping_address/shipping_address_cubit.dart';
+import '../core/controllers/favorite/favorite_cubit.dart';
+import '../core/controllers/home/home_cubit.dart';
 import '../core/controllers/navigation/navigation_cubit.dart';
 import '../core/controllers/view_mode/view_mode_cubit.dart';
 import '../core/routes/app_router.dart';
+import '../core/routes/routes.dart';
+import '../core/utils/app_colors.dart';
 
 class EcommerceApp extends StatelessWidget {
   const EcommerceApp({super.key});
@@ -22,10 +25,16 @@ class EcommerceApp extends StatelessWidget {
             ..authStatus(),
         ),
         BlocProvider(
+          create: (_) => HomeCubit()..getHomeProducts(),
+        ),
+        BlocProvider(create: (_) => CartCubit()),
+
+        BlocProvider(
           create: (context) => FavoriteCubit()..getFavorites(),
         ),
+        BlocProvider(create: (_) => ShippingAddressCubit()..getShippingAddresses()),
         BlocProvider(create: (context) => ViewModeCubit()),
-        BlocProvider(create: (_) => NavigationCubit()),
+
       ],
       child: Builder(
           builder: (context) {
@@ -49,8 +58,7 @@ class EcommerceApp extends StatelessWidget {
                     ),
                   ),
                   onGenerateRoute: AppRouter.generateRoute,
-                  initialRoute: state is AuthSuccess ? Routes.homepage : Routes
-                      .signup,
+                  initialRoute: state is AuthSuccess ? Routes.homepage : Routes.signup,
                 );
               },
             );

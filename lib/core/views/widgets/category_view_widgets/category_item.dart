@@ -1,6 +1,7 @@
 import 'package:ecommerceapp/core/models/product_model.dart';
 import 'package:ecommerceapp/core/routes/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../extensions/app_extentions.dart';
 import '../../../theme/app_text_styles.dart';
@@ -57,12 +58,25 @@ class CategoryItem extends StatelessWidget {
                   bottomRight: Radius.circular(16),
                 ),
                 child: catImage.startsWith('http')
-                    ? Image.network(
-                        catImage,
+                    ?  Image.network(
+                  catImage,
+                  width: 171,
+                  height: 100,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    // هنا الشيمر
+                    return Shimmer.fromColors(
+                      baseColor: Colors.grey.shade300,
+                      highlightColor: Colors.grey.shade100,
+                      child: Container(
                         width: 171,
                         height: 100,
-                        fit: BoxFit.cover,
-                      )
+                        color: Colors.grey.shade300,
+                      ),
+                    );
+                  },
+                )
                     : Image.asset(
                         catImage,
                         width: 171,

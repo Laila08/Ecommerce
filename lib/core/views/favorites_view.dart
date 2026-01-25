@@ -11,14 +11,12 @@ class FavoritesView extends StatefulWidget {
   @override
   State<FavoritesView> createState() => _FavoritesViewState();
 }
-
 class _FavoritesViewState extends State<FavoritesView> {
   @override
   void initState() {
     super.initState();
     context.read<FavoriteCubit>().clearSelectedCatType();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

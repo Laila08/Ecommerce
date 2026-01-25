@@ -5,13 +5,17 @@ abstract class AuthServices {
   Future<User?> loginWithEmailAndPassword(String email, String password);
   Future<User?> signupWithEmailAndPassword(String email, String password);
   Future<void> logout();
-
+  Future<void> sendResetPasswordEmail(String email);
 }
 
 class AuthServicesImp implements AuthServices {
   final firebaseAuth = FirebaseAuth.instance;
   @override
   User? get currentUser => firebaseAuth.currentUser;
+  @override
+  Future<void> sendResetPasswordEmail(String email) async {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+  }
 
   @override
   Future<User?> loginWithEmailAndPassword(String email, String password) async {

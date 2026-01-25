@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../controllers/cart/cart_cubit.dart';
 import '../../../../extensions/app_extentions.dart';
@@ -11,13 +12,10 @@ import 'product_price.dart';
 class CartItemCard extends StatelessWidget {
   final double width;
   final CartModel product;
-  final CartCubit cartCubit;
-
   const CartItemCard({
     super.key,
     required this.width,
     required this.product,
-    required this.cartCubit,
   });
 
   @override
@@ -35,7 +33,7 @@ class CartItemCard extends StatelessWidget {
         children: [
           ProductImage(productImage: product.productImage),
           Expanded(
-            child: ProductInfo(product: product, cartCubit: cartCubit),
+            child: ProductInfo(product: product),
           ),
           ProductPrice(product: product),
         ],

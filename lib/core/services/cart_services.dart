@@ -14,8 +14,15 @@ abstract class CartServices {
 class CartServicesImpl implements CartServices{
   final _services = FirestoreServices.instance;
   @override
-  Future<void> removeFromCarts(String userId, String productId) async =>
-      await _services.deleteData(path: ApiPath.carts(userId, productId));
+  @override
+  Future<void> removeFromCarts(String userId, String productId) async {
+    print('🔥 DELETE PATH => ${ApiPath.carts(userId, productId)}');
+
+    await _services.deleteData(
+      path: ApiPath.carts(userId, productId),
+    );
+  }
+
   @override
   Future<void> addProductToCart(String userId, CartModel cartProduct)async => await _services.setData(
     path: ApiPath.carts(userId, cartProduct.productId),
@@ -23,10 +30,21 @@ class CartServicesImpl implements CartServices{
   );
 
   @override
-  Future<List<CartModel>> getCartProducts(String userId) async => await _services.getCollection(
-    path: ApiPath.productsCart(userId),
-    builder: (data, documentId) => CartModel.fromMap(data, documentId),
-  );
+  Future<List<CartModel>> getCartProducts(String userId) async {
+    print('🔥 READ PATH => ${ApiPath.productsCart(userId)}');
+
+    return await _services.getCollection(
+      path: ApiPath.productsCart(userId),
+      builder: (data, documentId) =>
+          CartModel.fromMap(data, documentId),
+    );
+  }
+  Stream<List<CartModel>> cartStream(String userId) {
+    return _services.collectionStream(
+      path: ApiPath.productsCart(userId),
+      builder: (data, docId) => CartModel.fromMap(data!, docId),
+    );
+  }
 
   @override
   Future<void> addProductToFavorite(String userId, ProductModel product)async => await _services.setData(

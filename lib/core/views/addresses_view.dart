@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../controllers/checkout/shipping_address/shipping_address_cubit.dart';
-import 'widgets/shipping_address_view_widgets/Addresses_FAB.dart';
-import 'widgets/shipping_address_view_widgets/addresses_appBar.dart';
+import 'widgets/shipping_address_view_widgets/addresses_fab.dart';
+import 'widgets/shipping_address_view_widgets/addresses_app_bar.dart';
 import 'widgets/shipping_address_view_widgets/addresses_body.dart';
 
 class AddressesView extends StatefulWidget {
@@ -36,4 +36,3 @@ class _AddressesViewState extends State<AddressesView> {
     );
   }
 }
-
