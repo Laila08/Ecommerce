@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
-
-import '../../../components/widgets/app_text_field.dart';
 import '../../../controllers/checkout/shipping_address/shipping_address_cubit.dart';
-import '../../../theme/app_text_styles.dart';
+import '../../../utils/app_messages.dart';
+import 'base_address_field .dart';
 
 class AddressField extends StatelessWidget {
   final ShippingAddressCubit cubit;
-  final void Function(String)? onChanged;
 
-  const AddressField({super.key, required this.cubit, this.onChanged});
+  const AddressField({super.key, required this.cubit,});
 
   @override
   Widget build(BuildContext context) {
-    return AppTextField(
-      hintStyle: AppTextStyles.font14GrayWeight500,
-      labelText: "Address",
+    return BaseAddressField(
+      labelText: AppMessages.address,
       controller: cubit.addressController,
       validator: (x) => cubit.validateAddress(),
       textInputAction: TextInputAction.next,
-      onChangedFunction: onChanged ?? (x) {},
     );
   }
 }

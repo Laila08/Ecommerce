@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-
 import '../../../controllers/checkout/shipping_address/shipping_address_cubit.dart';
 import '../../../extensions/app_extentions.dart';
 
 class BackButtonWidget extends StatelessWidget {
   final ShippingAddressCubit shippingAddressCubit;
+
   const BackButtonWidget({super.key, required this.shippingAddressCubit});
 
   @override
@@ -16,11 +16,10 @@ class BackButtonWidget extends StatelessWidget {
             state.shippingAddresses.isNotEmpty) {
           context.pop();
         } else {
-          Navigator.pop(context);
-         // context.pop();
+          context.pop();
         }
       },
-      icon: Icon(Icons.arrow_back_ios),
+      icon: const Icon(Icons.arrow_back_ios),
     );
   }
 }

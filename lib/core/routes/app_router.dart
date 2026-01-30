@@ -1,6 +1,5 @@
 import 'package:ecommerceapp/core/controllers/checkout/checkout_cubit.dart';
 import 'package:ecommerceapp/core/controllers/checkout/shipping_address/shipping_address_cubit.dart';
-import 'package:ecommerceapp/core/controllers/home/home_cubit.dart';
 import 'package:ecommerceapp/core/controllers/product_details/product_details_cubit.dart';
 import 'package:ecommerceapp/core/models/shipping_address.dart';
 import 'package:ecommerceapp/core/routes/routes.dart';
@@ -12,11 +11,8 @@ import 'package:ecommerceapp/core/views/editing_address_view.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
-import '../controllers/cart/cart_cubit.dart';
 import '../controllers/category_details/category_details_cubit.dart';
 import '../controllers/navigation/navigation_cubit.dart';
-import '../controllers/navigation_controller.dart';
 import '../views/forgot_password_view.dart';
 import '../views/login_view.dart';
 import '../views/main_view.dart';
@@ -32,17 +28,21 @@ abstract class AppRouter {
           settings: settings,
         );
       case Routes.checkout:
-        final args= settings.arguments as Map<String,dynamic>;
+        final args = settings.arguments as Map<String, dynamic>;
         final cubit = args['cubit'] as ShippingAddressCubit;
         final totalPrice = args['totalPrice'] as double;
         return CupertinoPageRoute(
           builder: (_) => MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (context) => CheckoutCubit()..getDeliveryMethods(),
+                create: (context) =>
+                    CheckoutCubit()..getDeliveryMethods(totalPrice),
               ),
             ],
-            child: BlocProvider.value(value:cubit,child: CheckoutView(totalPrice: totalPrice),),
+            child: BlocProvider.value(
+              value: cubit,
+              child: CheckoutView(totalPrice: totalPrice),
+            ),
           ),
           settings: settings,
         );
@@ -71,11 +71,10 @@ abstract class AppRouter {
         final cubit = args['cubit'] as ShippingAddressCubit;
         final totalPrice = args['totalPrice'] as double;
         return CupertinoPageRoute(
-          builder: (_) =>
-              BlocProvider.value(
-                value: cubit,
-                child: AddressesView(totalPrice: totalPrice),
-              ),
+          builder: (_) => BlocProvider.value(
+            value: cubit,
+            child: AddressesView(totalPrice: totalPrice),
+          ),
           settings: settings,
         );
       case Routes.setShippingAddresses:
@@ -105,11 +104,14 @@ abstract class AppRouter {
           settings: settings,
         );
       case Routes.editAddress:
-        final args = settings.arguments as Map<String,dynamic>;
+        final args = settings.arguments as Map<String, dynamic>;
         final cubit = args['cubit'] as ShippingAddressCubit;
         final address = args['address'] as ShippingAddressModel;
         return CupertinoPageRoute(
-          builder: (_) =>BlocProvider.value(value: cubit, child: EditingAddressView(address:address)),
+          builder: (_) => BlocProvider.value(
+            value: cubit,
+            child: EditingAddressView(address: address),
+          ),
           settings: settings,
         );
       case Routes.homepage:

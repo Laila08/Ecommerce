@@ -1,6 +1,5 @@
 import 'package:ecommerceapp/core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
-
 import '../../../../../../core/utils/app_colors.dart';
 
 class ProductInfoWidget extends StatelessWidget {
@@ -20,6 +19,7 @@ class ProductInfoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double finalPrice = price * (1 - disCount / 100);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -27,7 +27,7 @@ class ProductInfoWidget extends StatelessWidget {
         Text(type, style: AppTextStyles.font16BlackWeight400),
         disCount == 0
             ? Text(
-                "${price.toString()}\$ ",
+                "${price.toString()}\$",
                 style: AppTextStyles.font14blackWeight500,
               )
             : Text.rich(
@@ -39,22 +39,17 @@ class ProductInfoWidget extends StatelessWidget {
                         fontSize: 11,
                         color: AppColors.grayColor,
                         fontWeight: FontWeight.w400,
-                        decoration: disCount > 0
-                            ? TextDecoration.lineThrough
-                            : TextDecoration.none,
+                        decoration: TextDecoration.lineThrough,
                       ),
                     ),
-
-                    disCount != 0
-                        ? TextSpan(
-                            text: " ${finalPrice.toString()}\$",
-                            style: TextStyle(
-                              fontSize: 11,
-                              color: AppColors.primaryColor,
-                              decoration: TextDecoration.none,
-                            ),
-                          )
-                        : TextSpan(),
+                    TextSpan(
+                      text: " ${finalPrice.toString()}\$",
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: AppColors.primaryColor,
+                        decoration: TextDecoration.none,
+                      ),
+                    ),
                   ],
                 ),
               ),

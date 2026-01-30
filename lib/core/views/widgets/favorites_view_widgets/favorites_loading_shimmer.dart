@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../controllers/view_mode/view_mode_cubit.dart';
 import '../../../extensions/app_extentions.dart';
-import '../../../theme/app_text_styles.dart';
-import '../../../utils/app_colors.dart';
 import '../../../utils/constants.dart';
 
 class FavoritesLoadingShimmer extends StatelessWidget {
@@ -12,7 +10,6 @@ class FavoritesLoadingShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // قراءة وضع الـ Grid أو List
     final isGrid = context.read<ViewModeCubit>().state == ViewMode.grid;
     final width = context.width;
     final gridWidth = (width - 16 * 2 - 16) / 2;
@@ -29,7 +26,6 @@ class FavoritesLoadingShimmer extends StatelessWidget {
     }
 
     if (isGrid) {
-      // Grid shimmer
       return GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
@@ -38,7 +34,7 @@ class FavoritesLoadingShimmer extends StatelessWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
-          childAspectRatio: (gridWidth / 260), // تقريبا نفس شكل البطاقات
+          childAspectRatio: (gridWidth / 260),
         ),
         itemCount: 6,
         itemBuilder: (context, index) => Shimmer.fromColors(
@@ -58,7 +54,6 @@ class FavoritesLoadingShimmer extends StatelessWidget {
         ),
       );
     } else {
-      // List shimmer
       return ListView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
@@ -73,7 +68,8 @@ class FavoritesLoadingShimmer extends StatelessWidget {
             children: [
               shimmerCard(height: 104, width: 104),
               10.horizontalSizedBox,
-              Expanded(
+              SizedBox(
+                width: width - 104 - 10 - 32,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -81,7 +77,7 @@ class FavoritesLoadingShimmer extends StatelessWidget {
                     6.verticalSizedBox,
                     shimmerCard(height: 14, width: double.infinity),
                     6.verticalSizedBox,
-                    shimmerCard(height: 14, width: width * 0.3),
+                    shimmerCard(height: 14, width: (width - 104 - 10 - 32) * 0.3),
                   ],
                 ),
               ),

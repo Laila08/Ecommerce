@@ -23,19 +23,12 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.pushNamed(
-          Routes.productinfo,
-          arguments: product.productId,
-        );
+        context.pushNamed(Routes.productinfo, arguments: product.productId);
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ProductItemHeader(
-            product: product,
-            color: color,
-            listType: listType,
-          ),
+          ProductItemHeader(product: product, color: color, listType: listType),
           ProductInfoWidget(
             name: product.productCategory,
             type: product.productName,
@@ -47,4 +40,3 @@ class ProductItem extends StatelessWidget {
     );
   }
 }
-

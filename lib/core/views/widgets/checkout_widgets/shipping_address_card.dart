@@ -6,6 +6,7 @@ import '../../../models/shipping_address.dart';
 import '../../../routes/routes.dart';
 import '../../../theme/app_text_styles.dart';
 import '../../../utils/app_colors.dart';
+import '../../../utils/app_messages.dart';
 
 class ShippingAddressCard extends StatelessWidget {
   final ShippingAddressModel address;
@@ -22,14 +23,14 @@ class ShippingAddressCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
       decoration: BoxDecoration(
         borderRadius: 16.allBorderRadius,
         color: AppColors.whiteColor,
         boxShadow: [
           BoxShadow(
             color: AppColors.blackColor.withValues(alpha: 0.08),
-            offset: Offset(0, 1),
+            offset: const Offset(0, 1),
             spreadRadius: 0,
             blurRadius: 25,
           ),
@@ -40,8 +41,14 @@ class ShippingAddressCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(address.address),
-              Spacer(),
+              Expanded(
+                child: Text(
+                  address.address,
+                  style: AppTextStyles.font14BlackWeight400,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const Spacer(),
               TextButton(
                 onPressed: () {
                   context.pushNamed(
@@ -50,7 +57,7 @@ class ShippingAddressCard extends StatelessWidget {
                   );
                 },
                 child: Text(
-                  "change",
+                  AppMessages.changeButton,
                   style: AppTextStyles.font14PrimaryWeight500,
                 ),
               ),
@@ -58,6 +65,7 @@ class ShippingAddressCard extends StatelessWidget {
           ),
           Text(
             address.state,
+            style: AppTextStyles.font14GrayWeight500,
           ).onlyPadding(bottomPadding: 10),
         ],
       ),

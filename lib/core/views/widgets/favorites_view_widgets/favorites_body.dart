@@ -27,11 +27,9 @@ class FavoritesBody extends StatelessWidget {
             if (state is FavoriteLoading) {
               return const FavoritesLoadingShimmer();
             } else if (state is FavoriteFailed) {
-              return FailedStateWidget(text:state.error,);
+              return FailedStateWidget(text: state.error);
             } else if (state is FavoriteSuccess) {
-              return FavoritesSuccessContent(
-                favoriteCubit: favoriteCubit,
-              );
+              return FavoritesSuccessContent(favoriteCubit: favoriteCubit);
             } else {
               return const SizedBox.shrink();
             }

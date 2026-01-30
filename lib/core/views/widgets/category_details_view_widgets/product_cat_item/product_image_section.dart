@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../../components/widgets/favorite_icon_widget.dart';
 import '../../../../components/widgets/product_badge_widget.dart';
 import '../../../../components/widgets/product_image_widget.dart';
@@ -46,15 +45,15 @@ class ProductImageSection extends StatelessWidget {
           bottom: 5,
           right: 0,
           child: BlocBuilder<FavoriteCubit, FavoriteState>(
-            builder: (context, favState) {
-              bool isFav = false;
-              if (favState is FavoriteSuccess) {
-                isFav = favState.favoriteProducts.any(
-                  (p) => p.productId == product.productId,
-                );
-              }
+            builder: (context, state) {
+              final isFavorite = (state is FavoriteSuccess)
+                  ? state.favoriteProducts.any(
+                      (p) => p.productId == product.productId,
+                    )
+                  : false;
+
               return FavoriteIconWidget(
-                isFavorite: isFav,
+                isFavorite: isFavorite,
                 onTap: () =>
                     context.read<FavoriteCubit>().toggleFavorite(product),
               );

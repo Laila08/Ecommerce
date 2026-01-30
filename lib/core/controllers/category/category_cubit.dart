@@ -37,27 +37,22 @@ class CategoryCubit extends Cubit<CategoryState> {
   }
 
   List<ProductModel> getProductsByCategory(
-      String gender,
-      ProductsListType category,
-      ) {
+    String gender,
+    ProductsListType category,
+  ) {
     final products = getProductsByGender(gender);
 
     if (category == ProductsListType.New) {
       return _getNewProducts(products);
     }
-    return products
-        .where((e) => e.productCategory == category.name)
-        .toList();
+    return products.where((e) => e.productCategory == category.name).toList();
   }
 
-  List<String> getCatTypes(
-      String gender,
-      ProductsListType category,
-      ) {
-    return getProductsByCategory(gender, category)
-        .map((e) => e.catType)
-        .toSet()
-        .toList();
+  List<String> getCatTypes(String gender, ProductsListType category) {
+    return getProductsByCategory(
+      gender,
+      category,
+    ).map((e) => e.catType).toSet().toList();
   }
 
   List<ProductModel> _getNewProducts(List<ProductModel> products) {

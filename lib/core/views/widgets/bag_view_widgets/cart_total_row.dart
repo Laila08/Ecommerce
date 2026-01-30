@@ -1,4 +1,5 @@
 import 'package:ecommerceapp/core/extensions/app_extentions.dart';
+import 'package:ecommerceapp/core/utils/app_messages.dart';
 import 'package:flutter/material.dart';
 
 import '../../../theme/app_text_styles.dart';
@@ -12,9 +13,12 @@ class CartTotalRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text("Total amount", style: AppTextStyles.font14GrayWeight500),
+        Text(AppMessages.totalAmount, style: AppTextStyles.font14GrayWeight500),
         const Spacer(),
-        Text("$totalPrice", style: AppTextStyles.font18BlackWeight400),
+        Text(
+          "${AppMessages.dollar}$totalPrice",
+          style: AppTextStyles.font18BlackWeight400,
+        ),
       ],
     ).verticalPadding(20);
   }

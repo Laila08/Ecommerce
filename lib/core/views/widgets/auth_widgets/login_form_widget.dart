@@ -23,63 +23,63 @@ class LoginFormWidget extends StatelessWidget {
       return;
     }
     await authCubit.login();
-    authCubit.clearForm();
   }
 
   @override
   Widget build(BuildContext context) {
-    final AuthCubit authCubit = context.read<AuthCubit>();
+    final authCubit = context.read<AuthCubit>();
 
-    return Form(
-      key: loginKey,
-      child: BlocBuilder<AuthCubit, AuthState>(
-        builder: (context, state) {
-          bool? isValidEmail;
-          bool? isValidPassword;
-          AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+    return FocusScope(
+      node: authCubit.focusScopeNode,
+      child: Form(
+        key: loginKey,
+        child: BlocBuilder<AuthCubit, AuthState>(
+          buildWhen: (previous, current) => current is AuthFormState,
+          builder: (context, state) {
+            final formState = state is AuthFormState ? state : null;
 
-          if (state is AuthFormState) {
-            isValidEmail = state.isValidEmail;
-            isValidPassword = state.isValidPassword;
-            autovalidateMode = state.autovalidateMode;
-          }
-
-          return Column(
-            spacing: 12,
-            children: [
-              EmailField(
-                authCubit: authCubit,
-                isValidEmail: isValidEmail,
-                autovalidateMode: autovalidateMode,
-              ),
-              PasswordField(
-                authCubit: authCubit,
-                isValidPassword: isValidPassword,
-                autovalidateMode: autovalidateMode,
-              ),
-              ActionTextWidget(
-                title:AppMessages.forgotPassMessageLogin ,
-                routeName: Routes.forgotPassword,
-              ),
-              5.verticalSizedBox,
-              SubmitButton(authCubit: authCubit, submit: loginUser, title: 'LOGIN',),
-              110.verticalSizedBox,
-              Text(
-                AppMessages.loginSocialMessage,
-                style: AppTextStyles.font14blackWeight500,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SocialWidget(image: AppAssets.gmailImg),
-                  SocialWidget(image: AppAssets.facebookImg).allPading(20),
-                ],
-              ),
-            ],
-          );
-        },
+            return Column(
+              spacing: 12,
+              children: [
+                EmailField(
+                  authCubit: authCubit,
+                  isValidEmail: formState?.isValidEmail,
+                  autovalidateMode:
+                      formState?.autovalidateMode ?? AutovalidateMode.disabled,
+                ),
+                PasswordField(
+                  authCubit: authCubit,
+                  isValidPassword: formState?.isValidPassword,
+                  autovalidateMode:
+                      formState?.autovalidateMode ?? AutovalidateMode.disabled,
+                ),
+                ActionTextWidget(
+                  title: AppMessages.forgotPassMessageLogin,
+                  routeName: Routes.forgotPassword,
+                ),
+                5.verticalSizedBox,
+                SubmitButton(
+                  authCubit: authCubit,
+                  submit: loginUser,
+                  title: AppMessages.loginTitle,
+                ),
+                110.verticalSizedBox,
+                Text(
+                  AppMessages.alreadyHaveAccount,
+                  style: AppTextStyles.font14blackWeight500,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SocialWidget(image: AppAssets.gmailImg),
+                    SocialWidget(image: AppAssets.facebookImg).allPading(20),
+                  ],
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
 }
-

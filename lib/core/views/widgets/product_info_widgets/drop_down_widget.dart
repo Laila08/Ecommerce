@@ -7,6 +7,7 @@ class DropDownWidget extends StatelessWidget {
   final void Function(String? value) onChanged;
   final List<String> items;
   final String hint;
+
   const DropDownWidget({
     super.key,
     required this.onChanged,
@@ -17,8 +18,8 @@ class DropDownWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
-      icon: const Icon(Icons.keyboard_arrow_down, color: Colors.black),
       initialValue: null,
+      icon: const Icon(Icons.keyboard_arrow_down, color: Colors.black),
       hint: FittedBox(child: Text(hint)),
       focusColor: AppColors.grayColor,
       dropdownColor: AppColors.backGroundColor,
@@ -27,15 +28,18 @@ class DropDownWidget extends StatelessWidget {
           borderRadius: 16.allBorderRadius,
           borderSide: BorderSide(color: AppColors.grayColor),
         ),
-        focusedBorder:  OutlineInputBorder(
+        focusedBorder: OutlineInputBorder(
           borderRadius: 16.allBorderRadius,
-          borderSide: BorderSide(color: AppColors.errorColor),
+          borderSide: BorderSide(color: AppColors.primaryColor),
         ),
       ),
       style: AppTextStyles.font14blackWeight500,
       isExpanded: true,
       items: items.map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(value: value, child: Text(value,style: AppTextStyles.font14blackWeight500,));
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value, style: AppTextStyles.font14blackWeight500),
+        );
       }).toList(),
       onChanged: onChanged,
     );

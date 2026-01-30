@@ -28,7 +28,7 @@ class CategoryDetailsView extends StatelessWidget {
           CategoryHeader(
             catName: catName,
             gender: gender,
-            catTypesList: catTypesList,
+            catTypesList:catTypesList,
           ),
           const CategoryProductsList(),
         ],
@@ -36,3 +36,4 @@ class CategoryDetailsView extends StatelessWidget {
     );
   }
 }
+

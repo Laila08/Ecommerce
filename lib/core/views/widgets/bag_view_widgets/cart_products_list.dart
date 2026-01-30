@@ -1,3 +1,4 @@
+import 'package:ecommerceapp/core/utils/app_messages.dart';
 import 'package:ecommerceapp/core/views/widgets/bag_view_widgets/cart_item.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,9 @@ class CartProductsList extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: products.length,
-      itemBuilder: (context, index) => products.isEmpty?Text("There is no product"):CartItem(product: products[index]),
+      itemBuilder: (context, index) => products.isEmpty
+          ? Text(AppMessages.noProduct)
+          : CartItem(product: products[index]),
     );
   }
 }

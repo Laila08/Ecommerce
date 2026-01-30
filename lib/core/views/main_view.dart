@@ -1,4 +1,3 @@
-import 'package:ecommerceapp/core/controllers/cart/cart_cubit.dart';
 import 'package:ecommerceapp/core/utils/app_colors.dart';
 import 'package:ecommerceapp/core/views/profile_view.dart';
 import 'package:flutter/material.dart';
@@ -17,20 +16,17 @@ class MainView extends StatelessWidget {
   Widget build(BuildContext context) {
     final navCubit = context.read<NavigationCubit>();
     final int? initialIndex =
-        ModalRoute.of(context)?.settings.arguments as int?;
+    ModalRoute.of(context)?.settings.arguments as int?;
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (initialIndex != null && navCubit.state == 0) {
         navCubit.changeIndex(initialIndex);
       }
     });
 
-    final List<Widget> pages = [
+    final List<Widget> pages = const [
       HomeView(),
       CategoryView(),
-      // BlocProvider(
-      //   create: (_) => CartCubit()..getCartProducts(),
-      //   child: BagView(),
-      // ),
       BagView(),
       FavoritesView(),
       ProfileView(),

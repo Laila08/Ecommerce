@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../extensions/app_extentions.dart';
 import '../../../theme/app_text_styles.dart';
+import '../../../utils/app_messages.dart';
 
 class PaymentSection extends StatelessWidget {
   const PaymentSection({super.key});
@@ -14,29 +15,22 @@ class PaymentSection extends StatelessWidget {
         Row(
           children: [
             Text(
-              'Payment',
+              AppMessages.paymentTitle,
               style: AppTextStyles.font16BlackWeight400,
             ).onlyPadding(bottomPadding: 16),
-            Spacer(),
+            const Spacer(),
             TextButton(
               onPressed: () {},
               child: Text(
-                "Change",
+                AppMessages.changeButton,
                 style: AppTextStyles.font14PrimaryWeight500,
               ),
             ),
           ],
         ),
-        Row(
-          children: [
-            Container(
-              decoration: BoxDecoration(borderRadius: 16.allBorderRadius),
-              child: Image.asset(
-                "assets/images/mastercard.png",
-                fit: BoxFit.cover,
-              ),
-            ),
-          ],
+        Container(
+          decoration: BoxDecoration(borderRadius: 16.allBorderRadius),
+          child: Image.asset("assets/images/mastercard.png", fit: BoxFit.cover),
         ),
       ],
     ).onlyPadding(bottomPadding: 45);

@@ -4,9 +4,9 @@ import '../../../extensions/app_extentions.dart';
 
 class SaveButton extends StatelessWidget {
   final String title;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
-  const SaveButton({super.key, required this.title, required this.onTap});
+  const SaveButton({super.key, required this.title, this.onTap});
 
   @override
   Widget build(BuildContext context) {

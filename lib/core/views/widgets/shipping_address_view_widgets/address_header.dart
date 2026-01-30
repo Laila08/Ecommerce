@@ -6,6 +6,7 @@ import '../../../extensions/app_extentions.dart';
 import '../../../models/shipping_address.dart';
 import '../../../routes/routes.dart';
 import '../../../theme/app_text_styles.dart';
+import '../../../utils/app_messages.dart';
 
 class AddressHeader extends StatelessWidget {
   final ShippingAddressModel address;
@@ -22,11 +23,14 @@ class AddressHeader extends StatelessWidget {
             Text(address.fullName),
             Spacer(),
             InkWell(
-              onTap: (){
-                context.pushNamed(Routes.editAddress,arguments:{'cubit':cubit,'address':address});
+              onTap: () {
+                context.pushNamed(
+                  Routes.editAddress,
+                  arguments: {'cubit': cubit, 'address': address},
+                );
               },
               child: Text(
-                "Edit",
+                AppMessages.edit,
                 style: AppTextStyles.font14PrimaryWeight500,
               ),
             ),

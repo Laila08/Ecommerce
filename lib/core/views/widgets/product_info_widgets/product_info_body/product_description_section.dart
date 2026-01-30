@@ -13,6 +13,9 @@ class ProductDescriptionSection extends StatelessWidget {
     return Text(
       description,
       style: AppTextStyles.font14BlackWeight400,
-    ).horizontalPadding(16);
+      maxLines: 10,
+      overflow: TextOverflow.ellipsis,
+    ).horizontalPadding(16).verticalPadding(8);
+
   }
 }

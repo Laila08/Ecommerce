@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
+
 import '../../../components/widgets/app_text_field.dart';
-import '../../../controllers/checkout/shipping_address/shipping_address_cubit.dart';
 import '../../../theme/app_text_styles.dart';
 
-class AddressFieldWidget extends StatelessWidget {
-  final TextEditingController controller;
+class BaseAddressField extends StatelessWidget {
   final String labelText;
-  final String Function(String?)? validator;
+  final TextEditingController controller;
   final TextInputAction textInputAction;
-  final void Function(String)? onChanged;
-  final TextStyle? hintStyle;
-  final bool readOnly;
+  final String? Function(String?) validator;
+  final bool? readOnly;
   final VoidCallback? onTap;
+  final void Function(String)? onChanged;
   final Widget? suffixIcon;
 
-  const AddressFieldWidget({
+  const BaseAddressField({
     super.key,
-    required this.controller,
     required this.labelText,
-    this.validator,
-    this.textInputAction = TextInputAction.next,
+    required this.controller,
+    required this.validator,
     this.onChanged,
-    this.hintStyle,
-    this.readOnly = false,
+    required this.textInputAction,
+    this.readOnly,
     this.onTap,
     this.suffixIcon,
   });
@@ -30,15 +28,14 @@ class AddressFieldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppTextField(
-      controller: controller,
       labelText: labelText,
+      controller: controller,
+      readOnly: readOnly?? false,
       validator: validator,
       textInputAction: textInputAction,
-      hintStyle: hintStyle ?? AppTextStyles.font14GrayWeight500,
-      readOnly: readOnly,
-      onChangedFunction: onChanged ?? (x) {},
       onTap: onTap,
       suffixIcon: suffixIcon,
+      hintStyle: AppTextStyles.font14GrayWeight500,
     );
   }
 }

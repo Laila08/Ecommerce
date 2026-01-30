@@ -8,6 +8,7 @@ import 'delivery_method_card.dart';
 
 class DeliveryMethodsList extends StatelessWidget {
   final CheckoutCubit checkoutCubit;
+
   const DeliveryMethodsList({super.key, required this.checkoutCubit});
 
   @override
@@ -20,7 +21,7 @@ class DeliveryMethodsList extends StatelessWidget {
           current is DeliveryMethodFailed,
       builder: (context, state) {
         if (state is DeliveryMethodLoading) {
-          return CircularProgressIndicator().center();
+          return const Center(child: CircularProgressIndicator());
         }
         if (state is DeliveryMethodFailed) {
           return AppDialog(message: state.error);
@@ -44,7 +45,8 @@ class DeliveryMethodsList extends StatelessWidget {
             ),
           );
         }
-        return SizedBox.shrink();
+
+        return const SizedBox.shrink();
       },
     ).verticalPadding(20);
   }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-
 import '../../../../components/widgets/rating_widget.dart';
 import '../../../../extensions/app_extentions.dart';
 import '../../../../models/product_model.dart';
 import '../../../../routes/routes.dart';
 import '../../../../theme/app_text_styles.dart';
 import '../../../../utils/app_colors.dart';
+import '../../../../utils/app_messages.dart';
 
 class ProductCard extends StatelessWidget {
   final double width;
@@ -50,7 +50,7 @@ class ProductCard extends StatelessWidget {
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(top: 10, left: 10),
+                padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -66,7 +66,7 @@ class ProductCard extends StatelessWidget {
                       product: product,
                     ).onlyPadding(topPadding: 7, bottomPadding: 4),
                     Text(
-                      "${product.productPrice}\$",
+                      "${AppMessages.dollar}${product.productPrice}",
                       style: AppTextStyles.font14blackWeight500,
                     ),
                   ],

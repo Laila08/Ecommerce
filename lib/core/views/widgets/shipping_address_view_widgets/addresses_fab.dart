@@ -25,14 +25,17 @@ class AddressesFAB extends StatelessWidget {
           color: AppColors.blackColor,
           boxShadow: [
             BoxShadow(
-              offset:Offset(0, 4) ,
-              spreadRadius:0 ,
-              blurRadius:4 ,
-              color:AppColors.blackColor.withValues(alpha: 0.22) ,
-            )
-          ]
+              offset: const Offset(0, 4),
+              spreadRadius: 0,
+              blurRadius: 4,
+              color: AppColors.blackColor.withValues(alpha: 0.22),
+            ),
+          ],
         ),
-        child: Icon(Icons.add,color: AppColors.whiteColor,).allPading(15),
+        child: const Icon(
+          Icons.add,
+          color: AppColors.whiteColor,
+        ).allPading(15),
       ),
     );
   }

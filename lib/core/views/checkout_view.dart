@@ -11,6 +11,7 @@ import 'widgets/checkout_widgets/payment_section.dart';
 import 'widgets/checkout_widgets/shipping_address_section.dart';
 import 'widgets/checkout_widgets/submit_order_button.dart';
 import 'package:flutter/material.dart';
+
 class CheckoutView extends StatefulWidget {
   final double totalPrice;
   const CheckoutView({super.key, required this.totalPrice});
@@ -20,7 +21,7 @@ class CheckoutView extends StatefulWidget {
 }
 
 class _CheckoutViewState extends State<CheckoutView> {
-  late ShippingAddressCubit shippingAddressCubit;
+  late final ShippingAddressCubit shippingAddressCubit;
   bool _addressSheetOpened = false;
 
   @override
@@ -34,123 +35,19 @@ class _CheckoutViewState extends State<CheckoutView> {
   Widget build(BuildContext context) {
     final checkoutCubit = context.read<CheckoutCubit>();
 
-    return WillPopScope(
-      onWillPop: () async {
-        final state = shippingAddressCubit.state;
-        if (state is ShippingAddressesLoaded && state.shippingAddresses.isEmpty) {
-          // المستخدم لم يدخل أي عنوان
-          final result = await showDialog<bool>(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text("العنوان مطلوب"),
-              content: const Text("يجب عليك إضافة عنوان قبل الخروج."),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(false), // لا تخرج
-                  child: const Text("إضافة عنوان"),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(true), // يسمح بالخروج
-                  child: const Text("العودة للرئيسية"),
-                ),
-              ],
-            ),
-          );
-
-          if (result == true) {
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              '/main',
-                  (route) => false,
-              arguments: 0, // الهوم بيج
-            );
-          }
-
-          return false; // منع الرجوع التلقائي
-        }
-
-        return true; // يسمح بالرجوع إذا هناك عنوان
-      },
-      child: BlocListener<ShippingAddressCubit, ShippingAddressState>(
-        listener: (context, state) {
-          if (state is ShippingAddressesLoaded &&
-              state.shippingAddresses.isEmpty &&
-              !_addressSheetOpened) {
-
-            _addressSheetOpened = true;
-
-            Navigator.push(
-              context,
-              CupertinoPageRoute(
-                builder: (_) => BlocProvider.value(
-                  value: shippingAddressCubit,
-                  child: const AddingAddressesView(),
-                ),
-              ),
-            ).then((added) {
-              _addressSheetOpened = false;
-              if (added == true) {
-                shippingAddressCubit.getShippingAddresses();
-              }
-            });
-          }
-        },
-        child: Scaffold(
-          appBar: CheckoutAppBar(),
-          backgroundColor: AppColors.backGroundColor,
-          body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ShippingAddressSection(
-                  shippingAddressCubit: shippingAddressCubit,
-                  totalPrice: widget.totalPrice,
-                ),
-                PaymentSection(),
-                DeliveryMethodSection(
-                  totalPrice: widget.totalPrice,
-                  checkoutCubit: checkoutCubit,
-                ),
-                SubmitOrderButton(),
-              ],
-            ).allPading(16),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/*
-class CheckoutView extends StatefulWidget {
-  final double totalPrice;
-  const CheckoutView({super.key, required this.totalPrice});
-
-  @override
-  State<CheckoutView> createState() => _CheckoutViewState();
-}
-
-class _CheckoutViewState extends State<CheckoutView> {
-  late ShippingAddressCubit shippingAddressCubit;
-  bool _addressSheetOpened = false;
-  @override
-  void initState() {
-    super.initState();
-    shippingAddressCubit = context.read<ShippingAddressCubit>();
-    shippingAddressCubit.getShippingAddresses();
-  }
-  @override
-  Widget build(BuildContext context) {
-    final checkoutCubit = context.read<CheckoutCubit>();
     return BlocListener<ShippingAddressCubit, ShippingAddressState>(
-        listener: (context, state) {
-          if (state is ShippingAddressesLoaded &&
-              state.shippingAddresses.isEmpty &&
-              !_addressSheetOpened) {
+      listenWhen: (previous, current) =>
+          current is ShippingAddressesLoaded &&
+          current.shippingAddresses.isEmpty,
+      listener: (context, state) {
+        if (state is ShippingAddressesLoaded &&
+            state.shippingAddresses.isEmpty &&
+            !_addressSheetOpened) {
+          _addressSheetOpened = true;
 
-            _addressSheetOpened = true;
-
-            Navigator.push(
+          WidgetsBinding.instance.addPostFrameCallback((_) async {
+            if (!mounted) return;
+            final added = await Navigator.push(
               context,
               CupertinoPageRoute(
                 builder: (_) => BlocProvider.value(
@@ -158,14 +55,16 @@ class _CheckoutViewState extends State<CheckoutView> {
                   child: const AddingAddressesView(),
                 ),
               ),
-            ).then((added) {
-              _addressSheetOpened = false; // reset
-              if (added == true) {
-                shippingAddressCubit.getShippingAddresses();
-              }
-            });
-          }
-        },
+            );
+
+            _addressSheetOpened = false;
+
+            if (added == true && mounted) {
+              shippingAddressCubit.getShippingAddresses();
+            }
+          });
+        }
+      },
       child: Scaffold(
         appBar: CheckoutAppBar(),
         backgroundColor: AppColors.backGroundColor,
@@ -173,10 +72,18 @@ class _CheckoutViewState extends State<CheckoutView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ShippingAddressSection(shippingAddressCubit: shippingAddressCubit,totalPrice:widget.totalPrice),
-              PaymentSection(),
-              DeliveryMethodSection(totalPrice: widget.totalPrice, checkoutCubit: checkoutCubit),
-              SubmitOrderButton(),
+              ShippingAddressSection(
+                shippingAddressCubit: shippingAddressCubit,
+                totalPrice: widget.totalPrice,
+              ),
+              const PaymentSection(),
+              DeliveryMethodSection(checkoutCubit: checkoutCubit),
+              SubmitOrderButton(
+                amount: checkoutCubit.state is DeliveryMethodLoaded
+                    ? (checkoutCubit.state as DeliveryMethodLoaded).totalAmount
+                    : widget.totalPrice,
+                checkoutCubit: checkoutCubit,
+              ),
             ],
           ).allPading(16),
         ),
@@ -184,5 +91,3 @@ class _CheckoutViewState extends State<CheckoutView> {
     );
   }
 }
-
-*/

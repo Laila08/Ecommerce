@@ -14,71 +14,68 @@ import 'social_text.dart';
 
 class SignUpFormWidget extends StatelessWidget {
   SignUpFormWidget({super.key});
-  final GlobalKey<FormState> signupKey = GlobalKey<FormState>();
 
-  Future<void> signupUser(AuthCubit authCubit) async {
-    final form = signupKey.currentState;
+  final GlobalKey<FormState> _signupKey = GlobalKey<FormState>();
+
+  Future<void> _signupUser(AuthCubit authCubit) async {
+    final form = _signupKey.currentState;
     if (form == null || !form.validate()) {
       authCubit.enableAutoValidate();
       return;
     }
     await authCubit.signUp();
-    authCubit.clearForm();
   }
 
   @override
   Widget build(BuildContext context) {
-    final AuthCubit authCubit = context.read<AuthCubit>();
-    return Form(
-      key: signupKey,
-      child: BlocBuilder<AuthCubit, AuthState>(
-        builder: (context, state) {
-          bool? isValidEmail;
-          bool? isValidPassword;
-          bool? isValidName;
-          AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
-
-          if (state is AuthFormState) {
-            isValidEmail = state.isValidEmail;
-            isValidPassword = state.isValidPassword;
-            isValidName = state.isValidName;
-            autovalidateMode = state.autovalidateMode;
-          }
-
-          return Column(
-            spacing: 12,
-            children: [
-              NameField(
-                authCubit: authCubit,
-                isValidName: isValidName,
-                autovalidateMode: autovalidateMode,
-              ),
-              EmailField(
-                authCubit: authCubit,
-                isValidEmail: isValidEmail,
-                autovalidateMode: autovalidateMode,
-              ),
-              PasswordField(
-                authCubit: authCubit,
-                isValidPassword: isValidPassword,
-                autovalidateMode: autovalidateMode,
-              ),
-              ActionTextWidget(
-                title: AppMessages.alreadyHaveAccount,
-                routeName: Routes.login,
-              ),
-              5.verticalSizedBox,
-              SubmitButton(
-                authCubit: authCubit,
-                submit: signupUser,
-                title: 'Sign Up',
-              ),
-              110.verticalSizedBox,
-              SocialText(),
-              SocialRow(),
-            ],
-          );
-        },
+    final authCubit = context.read<AuthCubit>();
+    return FocusScope(
+      node: authCubit.focusScopeNode,
+      child: Form(
+        key: _signupKey,
+        child: BlocBuilder<AuthCubit, AuthState>(
+          buildWhen: (previous, current) =>
+              current is AuthFormState ,
+          builder: (_, state) {
+            final formState = state is AuthFormState ? state : null;
+            return Column(
+              spacing: 12,
+              children: [
+                NameField(
+                  authCubit: authCubit,
+                  isValidName: formState?.isValidName,
+                  autovalidateMode:
+                      formState?.autovalidateMode ?? AutovalidateMode.disabled,
+                ),
+                EmailField(
+                  authCubit: authCubit,
+                  isValidEmail: formState?.isValidEmail,
+                  autovalidateMode:
+                      formState?.autovalidateMode ?? AutovalidateMode.disabled,
+                ),
+                PasswordField(
+                  authCubit: authCubit,
+                  isValidPassword: formState?.isValidPassword,
+                  autovalidateMode:
+                      formState?.autovalidateMode ?? AutovalidateMode.disabled,
+                ),
+                ActionTextWidget(
+                  title: AppMessages.alreadyHaveAccount,
+                  routeName: Routes.login,
+                ),
+                5.verticalSizedBox,
+                SubmitButton(
+                  authCubit: authCubit,
+                  submit: _signupUser,
+                  title: AppMessages.signUpTitle,
+                ),
+                110.verticalSizedBox,
+                const SocialText(),
+                const SocialRow(),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

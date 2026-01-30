@@ -1,10 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../controllers/auth/auth_cubit.dart';
 import '../../../extensions/app_extentions.dart';
 import '../../../routes/routes.dart';
+import '../../../utils/app_messages.dart';
 import 'profile_header.dart';
 import 'profile_menu_item.dart';
 
@@ -21,36 +21,36 @@ class ProfileContent extends StatelessWidget {
           email: "matildabrown@mail.com",
         ).onlyPadding(bottomPadding: 20, leftPadding: 15),
 
-        ProfileMenuItem(
+        const ProfileMenuItem(
           title: "My orders",
           subtitle: "Already have 12 orders",
         ),
-        ProfileMenuItem(
+        const ProfileMenuItem(
           title: "Shipping addresses",
           subtitle: "3 addresses",
         ),
-        ProfileMenuItem(
+        const ProfileMenuItem(
           title: "Payment methods",
           subtitle: "Visa  **34",
         ),
-        ProfileMenuItem(
+        const ProfileMenuItem(
           title: "Promo codes",
           subtitle: "You have special promo codes",
         ),
-        ProfileMenuItem(
+        const ProfileMenuItem(
           title: "My reviews",
           subtitle: "Reviews for 4 items",
         ),
-        ProfileMenuItem(
+        const ProfileMenuItem(
           title: "Settings",
           subtitle: "Notifications, password",
         ),
         ElevatedButton(
           onPressed: () {
-            BlocProvider.of<AuthCubit>(context).logout();
+            context.read<AuthCubit>().logout();
             context.pushReplacementNamed(Routes.signup);
           },
-          child: Text("Logout"),
+          child: const Text(AppMessages.profileTitle),
         )
       ],
     );

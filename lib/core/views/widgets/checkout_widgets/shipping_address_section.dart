@@ -6,10 +6,12 @@ import '../../../components/widgets/app_dialog.dart';
 import '../../../controllers/checkout/shipping_address/shipping_address_cubit.dart';
 import '../../../extensions/app_extentions.dart';
 import '../../../theme/app_text_styles.dart';
+import '../../../utils/app_messages.dart';
 
 class ShippingAddressSection extends StatelessWidget {
   final ShippingAddressCubit shippingAddressCubit;
   final double totalPrice;
+
   const ShippingAddressSection({
     super.key,
     required this.shippingAddressCubit,
@@ -22,7 +24,7 @@ class ShippingAddressSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Shipping address',
+          AppMessages.shippingAddresses,
           style: AppTextStyles.font16BlackWeight400,
         ).onlyPadding(bottomPadding: 16),
         BlocBuilder<ShippingAddressCubit, ShippingAddressState>(
@@ -33,7 +35,7 @@ class ShippingAddressSection extends StatelessWidget {
               current is ShippingAddressAddingFailed,
           builder: (context, state) {
             if (state is AddingShippingAddress) {
-              return CircularProgressIndicator().center();
+              return const Center(child: CircularProgressIndicator());
             }
             if (state is ShippingAddressAddingFailed) {
               return AppDialog(message: state.error);
@@ -43,7 +45,10 @@ class ShippingAddressSection extends StatelessWidget {
               if (defaultAddress == null) {
                 return TextButton(
                   onPressed: () {},
-                  child: Text("No addresses added yet"),
+                  child: Text(
+                    AppMessages.noAddressYet,
+                    style: AppTextStyles.font14PrimaryWeight500,
+                  ),
                 );
               }
               return ShippingAddressCard(
@@ -52,7 +57,7 @@ class ShippingAddressSection extends StatelessWidget {
                 totalPrice: totalPrice,
               );
             }
-            return SizedBox.shrink();
+            return const SizedBox.shrink();
           },
         ),
       ],

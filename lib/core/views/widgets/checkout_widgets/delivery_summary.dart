@@ -3,26 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../controllers/checkout/checkout_cubit.dart';
 import '../../../extensions/app_extentions.dart';
-import '../../../models/delivery_method_model.dart';
 import '../../../theme/app_text_styles.dart';
+import '../../../utils/app_messages.dart';
 
 class DeliverySummary extends StatelessWidget {
-  final double totalPrice;
   final CheckoutCubit checkoutCubit;
 
   const DeliverySummary({
     super.key,
-    required this.totalPrice,
     required this.checkoutCubit,
   });
-
-  List<MapEntry<String, int>> deliveryInfo(DeliveryMethodModel deliveryModel) {
-    return [
-      MapEntry('Order:', totalPrice.toInt()),
-      MapEntry('Delivery:', deliveryModel.price),
-      MapEntry('Summary:', totalPrice.toInt() + deliveryModel.price),
-    ];
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +20,22 @@ class DeliverySummary extends StatelessWidget {
       bloc: checkoutCubit,
       buildWhen: (previous, current) => current is DeliveryMethodLoaded,
       builder: (context, state) {
-        if (state is DeliveryMethodLoaded) {
-          final delivery = deliveryInfo(state.selectedMethod!);
+        if (state is DeliveryMethodLoaded && state.selectedMethod != null) {
+          final totalAmount = state.totalAmount;
+          final deliveryPrice = state.selectedMethod!.price;
+          final orderPrice = state.orderPrice;
+
+          final delivery = [
+            MapEntry(AppMessages.orderTitle, orderPrice.toInt()),
+            MapEntry(AppMessages.deliveryTitle, deliveryPrice),
+            MapEntry(AppMessages.summaryTitle, totalAmount.toInt()),
+          ];
+
           return Column(
             children: List.generate(delivery.length, (index) {
               final item = delivery[index];
+              final isSummary = item.key == AppMessages.totalAmount;
+
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6),
                 child: Row(
@@ -42,13 +43,13 @@ class DeliverySummary extends StatelessWidget {
                   children: [
                     Text(
                       item.key,
-                      style: item.key == 'Summary:'
+                      style: isSummary
                           ? AppTextStyles.font16GrayWeight400
                           : AppTextStyles.font14GrayWeight500,
                     ),
                     Text(
-                      '${item.value}\$',
-                      style: item.key == 'Summary:'
+                      '${item.value}${AppMessages.dollar}',
+                      style: isSummary
                           ? AppTextStyles.font18BlackWeight400
                           : AppTextStyles.font16BlackWeight400,
                     ),
@@ -58,7 +59,8 @@ class DeliverySummary extends StatelessWidget {
             }),
           ).onlyPadding(topPadding: 40);
         }
-        return SizedBox.shrink();
+
+        return const SizedBox.shrink();
       },
     );
   }

@@ -1,6 +1,7 @@
 import 'package:ecommerceapp/core/extensions/app_extentions.dart';
 import 'package:ecommerceapp/core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
+
 class ActionTextWidget extends StatelessWidget {
   const ActionTextWidget({
     super.key,
@@ -15,7 +16,10 @@ class ActionTextWidget extends StatelessWidget {
       onTap: () {
         context.pushNamed(routeName);
       },
-      child: Align(alignment:Alignment.bottomRight,child: Text(title,style: AppTextStyles.font14blackWeight500,)),
+      child: Align(
+        alignment: Alignment.bottomRight,
+        child: Text(title, style: AppTextStyles.font14blackWeight500),
+      ),
     );
   }
 }

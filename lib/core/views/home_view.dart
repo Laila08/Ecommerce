@@ -12,6 +12,7 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = context.width;
     final homeCubit = context.read<HomeCubit>();
+
     return MediaQuery.removePadding(
       context: context,
       removeTop: true,
@@ -26,4 +27,3 @@ class HomeView extends StatelessWidget {
     );
   }
 }
-

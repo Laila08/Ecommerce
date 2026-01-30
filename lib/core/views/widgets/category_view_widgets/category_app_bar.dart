@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../extensions/app_extentions.dart';
 import '../../../theme/app_text_styles.dart';
 import '../../../utils/app_colors.dart';
+import '../../../utils/app_messages.dart';
 
 class CategoryAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CategoryAppBar({super.key});
@@ -10,7 +11,7 @@ class CategoryAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text("Categories", style: AppTextStyles.font18BlackWeight400),
+      title: Text(AppMessages.categories, style: AppTextStyles.font18BlackWeight400),
       backgroundColor: AppColors.whiteColor,
       centerTitle: true,
       actions: [

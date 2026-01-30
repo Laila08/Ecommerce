@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
-
-import '../../../components/widgets/app_text_field.dart';
 import '../../../controllers/checkout/shipping_address/shipping_address_cubit.dart';
-import '../../../theme/app_text_styles.dart';
+import '../../../utils/app_messages.dart';
+import 'base_address_field .dart';
 
 class ZipCodeField extends StatelessWidget {
   final ShippingAddressCubit cubit;
-  final void Function(String)? onChanged;
 
-  const ZipCodeField({super.key, required this.cubit, this.onChanged});
+  const ZipCodeField({super.key, required this.cubit,});
 
   @override
   Widget build(BuildContext context) {
-    return AppTextField(
-      hintStyle: AppTextStyles.font14GrayWeight500,
-      labelText: "Zip Code (Postal Code)",
+    return BaseAddressField(
+      labelText: AppMessages.zip,
       controller: cubit.zipCodeController,
       validator: (x) => cubit.validateZipCode(),
       textInputAction: TextInputAction.next,
-      onChangedFunction: onChanged ?? (x) {},
     );
   }
 }

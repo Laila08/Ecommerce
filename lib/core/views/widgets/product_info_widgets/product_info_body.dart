@@ -21,9 +21,9 @@ class ProductInfoBody extends StatelessWidget {
           ProductImageSection(image: product.productImage),
           ProductOptionsRow(product: product),
           ProductHeaderSection(product: product),
-          RatingWidget(
-            product: product,
-          ).horizontalPadding(16).onlyPadding(bottomPadding: 15, topPadding: 5),
+          RatingWidget(product: product)
+              .horizontalPadding(16)
+              .onlyPadding(bottomPadding: 15, topPadding: 5),
           ProductDescriptionSection(description: product.desc),
           15.verticalSizedBox,
         ],

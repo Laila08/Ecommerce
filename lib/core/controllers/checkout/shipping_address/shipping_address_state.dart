@@ -7,7 +7,6 @@ final class ShippingAddressInitial extends ShippingAddressState {}
 
 //------------------------------- ShippingAddresses -----------------------------
 // getShippingAddresses
-final class ShippingAddressesLoading extends ShippingAddressState {}
 
 final class ShippingAddressesLoaded extends ShippingAddressState {
   final List<ShippingAddressModel> shippingAddresses;
@@ -17,6 +16,11 @@ final class ShippingAddressesLoaded extends ShippingAddressState {
     required this.shippingAddresses,
     this.defaultAddress,
   });
+}
+
+class ShippingAddressesLoading extends ShippingAddressState {
+  final int shimmerCount;
+  ShippingAddressesLoading({required this.shimmerCount});
 }
 final class CountryTextStyleChanged extends ShippingAddressState {}
 
@@ -49,12 +53,13 @@ final class ShippingAddressEditingFailed extends ShippingAddressState {
 
   ShippingAddressEditingFailed(this.error);
 }
-final class MakingPreferred extends ShippingAddressState {}
-
+final class MakingPreferred extends ShippingAddressState {
+  final String addressId;
+  MakingPreferred(this.addressId);
+}
 final class PreferredMade extends ShippingAddressState {}
 
 final class PreferredMakingFailed extends ShippingAddressState {
   final String error;
-
   PreferredMakingFailed(this.error);
 }

@@ -1,4 +1,3 @@
-import 'package:ecommerceapp/core/controllers/cart/cart_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,12 +9,12 @@ import '../../../models/product_model.dart';
 import '../../../utils/app_colors.dart';
 
 class AddToCartBottomBar extends StatelessWidget {
-  final ProductDetailsCubit productdetailsCubit;
+  final ProductDetailsCubit productDetailsCubit;
   final ProductModel product;
 
   const AddToCartBottomBar({
     super.key,
-    required this.productdetailsCubit,
+    required this.productDetailsCubit,
     required this.product,
   });
 
@@ -35,11 +34,12 @@ class AddToCartBottomBar extends StatelessWidget {
       ),
       padding: 16.allPading,
       child: BlocConsumer<ProductDetailsCubit, ProductDetailsState>(
-        bloc: productdetailsCubit,
+        bloc: productDetailsCubit,
         listenWhen: (previous, current) =>
             current is AddedToCart || current is AddToCartError,
         listener: (context, state) {
           if (state is AddedToCart) {
+            if (!context.mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Product added to the cart!'),
@@ -47,6 +47,7 @@ class AddToCartBottomBar extends StatelessWidget {
               ),
             );
           } else if (state is AddToCartError) {
+            if (!context.mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.error),
@@ -57,12 +58,13 @@ class AddToCartBottomBar extends StatelessWidget {
         },
         builder: (context, state) {
           if (state is AddingToCart) {
-            return LoadingButtonWidget();
+            return const LoadingButtonWidget();
           }
           return MainButton(
             title: "ADD TO CART",
             onTap: () async {
-              await productdetailsCubit.addToCart(product);
+              if (productDetailsCubit.isClosed) return;
+              await productDetailsCubit.addToCart(product);
             },
           );
         },

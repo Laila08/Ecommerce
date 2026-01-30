@@ -11,18 +11,12 @@ class BagBlocContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('🟥 UI CartCubit hash = ${context.read<CartCubit>().hashCode}');
-
-    final cartCubit = context.read<CartCubit>();
-
     return BlocBuilder<CartCubit, CartState>(
-      bloc: cartCubit,
-      // buildWhen: (previous, current) =>
-      //     current is CartILoading ||
-      //     current is CartISuccess ||
-      //     current is CartIFailed,
+      buildWhen: (previous, current) =>
+          current is CartILoading ||
+          current is CartISuccess ||
+          current is CartIFailed,
       builder: (context, state) {
-        print('🧩 UI RECEIVED state = ${state.runtimeType}');
         if (state is CartILoading) {
           return const BagLoadingShimmer();
         } else if (state is CartIFailed) {
@@ -32,9 +26,8 @@ class BagBlocContent extends StatelessWidget {
             products: state.cartProducts,
             totalPrice: state.totalPrice,
           );
-        } else {
-          return const SizedBox.shrink();
         }
+        return const SizedBox.shrink();
       },
     );
   }

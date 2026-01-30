@@ -1,4 +1,5 @@
 import 'package:ecommerceapp/core/controllers/navigation/navigation_cubit.dart';
+import 'package:ecommerceapp/core/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -35,7 +36,7 @@ class BottomNavItem extends StatelessWidget {
               Text(
                 label,
                 style: TextStyle(
-                  color: isSelected ? Colors.red : Colors.grey,
+                  color: isSelected ?AppColors.errorColor : AppColors.grayColor,
                   fontSize: 12,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 ),

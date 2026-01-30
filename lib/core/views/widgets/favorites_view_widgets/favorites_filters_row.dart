@@ -13,20 +13,25 @@ class ProductFiltersRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        FilterSection(),
-        SortSection(sortCubit: sortCubit),
-        BlocBuilder<ViewModeCubit, ViewMode>(
-          builder: (context, mode) {
-            return IconButton(
-              icon: Icon(mode == ViewMode.list ? Icons.grid_view : Icons.list),
-              onPressed:() => context.read<ViewModeCubit>().toggle(),
-            );
-          },
-        ),
-      ],
-    ).horizontalPadding(16).onlyPadding(topPadding: 16, bottomPadding: 10);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const FilterSection(),
+          SortSection(sortCubit: sortCubit),
+          BlocBuilder<ViewModeCubit, ViewMode>(
+            builder: (context, mode) {
+              return IconButton(
+                icon: Icon(
+                  mode == ViewMode.list ? Icons.grid_view : Icons.list,
+                ),
+                onPressed: () => context.read<ViewModeCubit>().toggle(),
+              );
+            },
+          ),
+        ],
+      ),
+    );
   }
 }

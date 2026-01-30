@@ -4,13 +4,14 @@ import '../../../components/widgets/social_widget.dart';
 import '../../../extensions/app_extentions.dart';
 import '../../../theme/app_text_styles.dart';
 import '../../../utils/app_assets.dart';
+import '../../../utils/app_messages.dart'; // استدعاء AppMessages
 
 class SocialText extends StatelessWidget {
   const SocialText({super.key});
   @override
   Widget build(BuildContext context) {
     return Text(
-      "Or sign up with social account",
+      AppMessages.signUpWithSocial,
       style: AppTextStyles.font14blackWeight500,
     );
   }

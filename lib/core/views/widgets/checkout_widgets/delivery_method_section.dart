@@ -5,14 +5,13 @@ import '../../../extensions/app_extentions.dart';
 import '../../../theme/app_text_styles.dart';
 import 'delivery_methods_list.dart';
 import 'delivery_summary.dart';
+import '../../../utils/app_messages.dart';
 
 class DeliveryMethodSection extends StatelessWidget {
-  final double totalPrice;
   final CheckoutCubit checkoutCubit;
 
   const DeliveryMethodSection({
     super.key,
-    required this.totalPrice,
     required this.checkoutCubit,
   });
 
@@ -21,10 +20,12 @@ class DeliveryMethodSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Delivery method', style: AppTextStyles.font16BlackWeight400)
-            .onlyPadding(bottomPadding: 7),
+        Text(
+          AppMessages.deliveryMethodTitle,
+          style: AppTextStyles.font16BlackWeight400,
+        ).onlyPadding(bottomPadding: 7),
         DeliveryMethodsList(checkoutCubit: checkoutCubit),
-        DeliverySummary(totalPrice: totalPrice, checkoutCubit: checkoutCubit),
+        DeliverySummary(checkoutCubit: checkoutCubit),
       ],
     );
   }

@@ -4,14 +4,6 @@ import '../extensions/app_extentions.dart';
 
 String documentidFromLocalData() => DateTime.now().toIso8601String();
 const double kCupertinoNavigationBarHeight = 44.0;
-List<String> sortOptions = [
-  'Popular',
-  'Newest',
-  'Customer review',
-  'Price: lowest to high',
-  'Price: highest to low',
-];
-
 enum ViewMode { list, grid }
 
 double calculateChildAspectRatio(BuildContext context, double itemHeight) {

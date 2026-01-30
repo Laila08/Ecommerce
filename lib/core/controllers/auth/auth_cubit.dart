@@ -7,25 +7,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  AuthCubit() : super(AuthFormState()) {
-    emailFocusNode.addListener(() {
-      if (!emailFocusNode.hasFocus) validateEmail();
-    });
-    passwordFocusNode.addListener(() {
-      if (!passwordFocusNode.hasFocus) validatePassword();
-    });
-    nameFocusNode.addListener(() {
-      if (!nameFocusNode.hasFocus) validateName();
-    });
-  }
+  AuthCubit() : super(AuthFormState());
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final nameController = TextEditingController();
+  final FocusScopeNode focusScopeNode = FocusScopeNode();
 
   final emailFocusNode = FocusNode();
   final passwordFocusNode = FocusNode();
   final FocusNode nameFocusNode = FocusNode();
+  void resetFormStatus() {
+    if (isClosed) return;
+    emit(
+      AuthFormState(
+        autovalidateMode: AutovalidateMode.disabled,
+        isValidEmail: null,
+        isValidPassword: null,
+        isValidName: null,
+      ),
+    );
+  }
 
   void validateEmail() {
     if (isClosed) return;
@@ -49,7 +51,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
     try {
       await authServices.sendResetPasswordEmail(email);
-      emit(AuthSuccess());
+      emit(AuthResetPasswordSuccess());
     } catch (e) {
       emit(AuthFailed(e.toString()));
     }
@@ -61,7 +63,7 @@ class AuthCubit extends Cubit<AuthState> {
     final value = passwordController.text.trim();
     final isValid = value.isNotEmpty && value.length >= 6;
     final formState = state is AuthFormState ? state as AuthFormState : null;
-    if (formState != null && formState.isValidEmail == isValid) return;
+    if (formState != null && formState.isValidPassword == isValid) return;
     if (isClosed) return;
 
     emit(
@@ -147,7 +149,17 @@ class AuthCubit extends Cubit<AuthState> {
     emailController.clear();
     passwordController.clear();
     nameController.clear();
-    emit(AuthFormState());
+
+    if (isClosed) return;
+
+    emit(
+      AuthFormState(
+        autovalidateMode: AutovalidateMode.disabled,
+        isValidEmail: null,
+        isValidPassword: null,
+        isValidName: null,
+      ),
+    );
   }
 
   @override
@@ -215,6 +227,7 @@ class AuthCubit extends Cubit<AuthState> {
     if (user != null) {
       emit(AuthSuccess());
     } else {
+      clearForm();
       emit(AuthInitial());
     }
   }
@@ -223,6 +236,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
     try {
       await authServices.logout();
+      clearForm();
       emit(AuthInitial());
     } catch (e) {
       emit(AuthFailed(e.toString()));

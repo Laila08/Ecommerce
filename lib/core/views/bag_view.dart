@@ -7,8 +7,6 @@ class BagView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
-      child: BagBody(),
-    );
+    return const SafeArea(child: BagBody());
   }
 }

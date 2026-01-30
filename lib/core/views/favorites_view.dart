@@ -11,25 +11,32 @@ class FavoritesView extends StatefulWidget {
   @override
   State<FavoritesView> createState() => _FavoritesViewState();
 }
+
 class _FavoritesViewState extends State<FavoritesView> {
+  late final FavoriteCubit favoriteCubit;
+
   @override
   void initState() {
     super.initState();
-    context.read<FavoriteCubit>().clearSelectedCatType();
+    favoriteCubit = context.read<FavoriteCubit>();
+    favoriteCubit.clearSelectedCatType();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.whiteColor,
-        actions: [
+        actions: const [
           IconButton(
             onPressed: null,
             icon: Icon(Icons.search, color: AppColors.blackColor),
           ),
         ],
       ),
-      body: const SafeArea(child: FavoritesBody()),
+      body: const SafeArea(
+        child: FavoritesBody(),
+      ),
     );
   }
 }

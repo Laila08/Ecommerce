@@ -22,6 +22,7 @@ class CategoryHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<CategoryDetailsCubit>();
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -38,9 +39,8 @@ class CategoryHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TitleHeaderWidget(title: catName),
-          catTypesList.isEmpty
-              ? SizedBox()
-              : CategoryTypesList(gender: gender, catTypesList: catTypesList),
+          if (catTypesList.isNotEmpty)
+            CategoryTypesList(gender: gender, catTypesList: catTypesList),
           ProductFiltersRow(sortCubit: cubit.sortCubit),
         ],
       ),

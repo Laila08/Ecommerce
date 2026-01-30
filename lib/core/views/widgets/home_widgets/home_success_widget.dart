@@ -6,6 +6,7 @@ import 'package:ecommerceapp/core/controllers/home/home_cubit.dart';
 import 'package:ecommerceapp/core/views/widgets/home_widgets/text_header_widget.dart';
 import 'package:flutter/material.dart';
 import 'horizontal_products_list.dart';
+import '../../../../core/utils/app_messages.dart';
 
 class HomeSuccessWidget extends StatelessWidget {
   final HomeSuccess state;
@@ -17,9 +18,9 @@ class HomeSuccessWidget extends StatelessWidget {
     return Column(
       children: [
         TextHeaderWidget(
-          subTitle: "Super summer sale",
-          title: "Sale",
-          trailingText: "View all",
+          subTitle: AppMessages.saleSubTitle,
+          title: AppMessages.sale,
+          trailingText: AppMessages.viewAll,
           textStyle: AppTextStyles.font11BlackWeight400,
           titleStyle: AppTextStyles.font34BlackWeight700,
           subTitleStyle: AppTextStyles.font11GrayWeight400,
@@ -31,9 +32,9 @@ class HomeSuccessWidget extends StatelessWidget {
           products: state.salesProducts,
         ),
         TextHeaderWidget(
-          subTitle: "You’ve never seen it before!",
-          title: "New",
-          trailingText: "View all",
+          subTitle: AppMessages.newSubTitle,
+          title: AppMessages.newArrival,
+          trailingText: AppMessages.viewAll,
           textStyle: AppTextStyles.font11BlackWeight400,
           titleStyle: AppTextStyles.font34BlackWeight700,
           subTitleStyle: AppTextStyles.font11GrayWeight400,

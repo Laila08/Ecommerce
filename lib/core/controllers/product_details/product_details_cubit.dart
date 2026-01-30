@@ -21,11 +21,14 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
   String? color;
 
   Future<void> getProductDetails(String productId) async {
+    if (isClosed) return;
     emit(ProductDetailsLoading());
     try {
       final product = await productDetailsServices.getProductDetails(productId);
+      if (isClosed) return;
       emit(ProductDetailsLoaded(product));
     } catch (e) {
+      if (isClosed) return;
       emit(ProductDetailsError(e.toString()));
     }
   }
@@ -41,16 +44,20 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
   }
 
   Future<void> addToCart(ProductModel product) async {
+    if (isClosed) return;
     emit(AddingToCart());
     try {
       final currentUser = authServices.currentUser;
       if (size == null && color == null) {
+        if (isClosed) return;
         emit(AddToCartError('Please select a size and a color'));
         return;
       } else if (size == null) {
+        if (isClosed) return;
         emit(AddToCartError('Please select a size'));
         return;
       } else if (color == null) {
+        if (isClosed) return;
         emit(AddToCartError('Please select a color'));
         return;
       }
@@ -65,19 +72,11 @@ class ProductDetailsCubit extends Cubit<ProductDetailsState> {
           createdAt: product.createdAt
       );
       await cartServices.addProductToCart(currentUser!.uid, newProduct);
+      if (isClosed) return;
       emit(AddedToCart());
     } catch (e) {
+      if (isClosed) return;
       emit(AddToCartError(e.toString()));
     }
   }
-
-// Future<void> toggleFavorite(ProductModel product) async {
-//   try {
-//     final currentUser = authServices.currentUser;
-//     final updatedProduct = await favoriteServices.toggleFavorite(currentUser!.uid, product);
-//     emit(ProductDetailsLoaded(updatedProduct));
-//   } catch (e) {
-//     emit(ProductDetailsError(e.toString()));
-//   }
-// }
 }

@@ -1,13 +1,14 @@
 import 'package:ecommerceapp/core/controllers/favorite/favorite_cubit.dart';
 import 'package:ecommerceapp/core/models/product_model.dart';
 import 'package:ecommerceapp/core/theme/app_text_styles.dart';
+import 'package:ecommerceapp/core/utils/app_messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../controllers/view_mode/view_mode_cubit.dart';
 import '../../../extensions/app_extentions.dart';
 import '../../../utils/constants.dart';
-import 'favorite_item_widget.dart';
-import 'pro_fav_grid_item.dart';
+import 'favorite_item/favorite_item_widget.dart';
+import 'fav_grid_item/pro_fav_grid_item.dart';
 
 class FavoriteListWidget extends StatelessWidget {
   final List<ProductModel> products;
@@ -24,11 +25,11 @@ class FavoriteListWidget extends StatelessWidget {
       child: BlocBuilder<ViewModeCubit, ViewMode>(
         builder: (context, mode) {
           return mode == ViewMode.list
-            ? products.isEmpty ?Text("There is no Data",style: AppTextStyles.font16BlackWeight400,).center():ListView.builder(
+            ? products.isEmpty ?Text(AppMessages.noProduct,style: AppTextStyles.font16BlackWeight400,).center():ListView.builder(
           itemCount: products.length,
           itemBuilder: (BuildContext context, int index) =>
               FavoriteItemWidget(product:  products[index]),
-        ) : products.isEmpty ?Text("There is no Data",style: AppTextStyles.font16BlackWeight400,).center():GridView.builder(
+        ) : products.isEmpty ?Text(AppMessages.noProduct,style: AppTextStyles.font16BlackWeight400,).center():GridView.builder(
           padding: const EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 16,

@@ -11,22 +11,39 @@ class SubmitButton extends StatelessWidget {
   final AuthCubit authCubit;
   final String title;
   final Future<void> Function(AuthCubit) submit;
-
-  const SubmitButton({super.key, required this.authCubit, required this.submit, required this.title});
+  final VoidCallback? onSuccess;
+  const SubmitButton({
+    super.key,
+    required this.authCubit,
+    required this.submit,
+    required this.title,
+    this.onSuccess,
+  });
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthCubit, AuthState>(
       bloc: authCubit,
-      listenWhen: (previous, current) => current is AuthSuccess || current is AuthFailed,
+      listenWhen: (previous, current) =>
+          current is AuthSuccess || current is AuthFailed || current is AuthResetPasswordSuccess,
       listener: (context, state) {
         if (state is AuthFailed) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.error), backgroundColor: AppColors.primaryColor),
+            SnackBar(
+              content: Text(state.error),
+              backgroundColor: AppColors.primaryColor,
+            ),
           );
         }
         if (state is AuthSuccess) {
-          Navigator.pushReplacementNamed(context, Routes.homepage, arguments: 0);
+            Navigator.pushReplacementNamed(
+              context,
+              Routes.homepage,
+              arguments: 0,
+            );
+          }
+        if (state is AuthResetPasswordSuccess && onSuccess != null) {
+          onSuccess!();
         }
       },
       builder: (context, state) {

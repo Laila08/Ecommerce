@@ -26,7 +26,7 @@ class DeliveryMethodCard extends StatelessWidget {
       hoverColor: Colors.transparent,
       child: Container(
         margin: EdgeInsets.only(right: isLast ? 0 : 16),
-        padding: 10.allPading,
+        padding: const EdgeInsets.all(10),
         height: 72,
         decoration: BoxDecoration(
           borderRadius: 16.allBorderRadius,
@@ -35,7 +35,7 @@ class DeliveryMethodCard extends StatelessWidget {
             BoxShadow(
               color: AppColors.blackColor.withValues(alpha: 0.08),
               blurRadius: 25,
-              offset: Offset(0, 1),
+              offset: const Offset(0, 1),
             ),
           ],
         ),
@@ -43,7 +43,10 @@ class DeliveryMethodCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Image.asset(deliveryMethod.imgUrl),
-            Text(deliveryMethod.days, style: AppTextStyles.font11GrayWeight400),
+            Text(
+              deliveryMethod.days,
+              style: AppTextStyles.font11GrayWeight400,
+            ),
           ],
         ),
       ),

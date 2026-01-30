@@ -15,8 +15,9 @@ class AppTextField extends StatelessWidget {
   final FocusNode? focusNodeType;
   final VoidCallback? onEditingCompleteFun;
   final TextInputAction textInputAction;
-  final ValueChanged<String> onChangedFunction;
+  final ValueChanged<String>? onChangedFunction;
   final TextStyle hintStyle;
+  final bool autofocus;
   AutovalidateMode? autovalidateMode;
 
   AppTextField({
@@ -24,13 +25,14 @@ class AppTextField extends StatelessWidget {
     required this.labelText,
     this.keyboardType,
     this.autovalidateMode,
+    this.autofocus = false,
     this.controller,
     required this.validator,
     this.suffixIcon,
     this.focusNodeType,
     this.onEditingCompleteFun,
     required this.textInputAction,
-    required this.onChangedFunction,
+    this.onChangedFunction,
     this.hintStyle = AppTextStyles.font14GrayWeight500,
     this.onTap,
     this.readOnly = false,
@@ -53,6 +55,7 @@ class AppTextField extends StatelessWidget {
         onTap: onTap,
         controller: controller,
         focusNode: focusNodeType,
+        autofocus: autofocus,
         onEditingComplete: () {
           if (onEditingCompleteFun != null) {
             onEditingCompleteFun!();
@@ -61,7 +64,9 @@ class AppTextField extends StatelessWidget {
         style: AppTextStyles.font14blackWeight500,
         cursorColor: AppColors.blackColor,
         keyboardType: keyboardType,
-        onChanged: onChangedFunction,
+        onChanged: (value) {
+          onChangedFunction?.call(value);
+        },
         autovalidateMode: autovalidateMode,
         validator: (x) => validator(x),
         textInputAction: textInputAction,

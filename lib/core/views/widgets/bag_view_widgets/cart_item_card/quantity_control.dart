@@ -11,10 +11,7 @@ import '../../../../components/widgets/circle_icon_widget.dart';
 class QuantityControl extends StatelessWidget {
   final CartModel product;
 
-  const QuantityControl({
-    super.key,
-    required this.product,
-  });
+  const QuantityControl({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {

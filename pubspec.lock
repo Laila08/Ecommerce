@@ -129,6 +129,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.6"
+  dio:
+    dependency: "direct main"
+    description:
+      name: dio
+      sha256: b9d46faecab38fc8cc286f80bc4d61a3bb5d4ac49e51ed877b4d6706efe57b25
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.9.1"
+  dio_web_adapter:
+    dependency: transitive
+    description:
+      name: dio_web_adapter
+      sha256: "7586e476d70caecaf1686d21eee7247ea43ef5c345eab9e0cc3583ff13378d78"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.1"
   email_validator:
     dependency: "direct main"
     description:
@@ -230,6 +246,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.1"
+  flutter_stripe:
+    dependency: "direct main"
+    description:
+      name: flutter_stripe
+      sha256: "588f7b179784c0203fe99a388ca1f453b61fdc5e35bf32e508685ed00cffbb2e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "12.2.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -248,6 +272,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "10.12.0"
+  freezed_annotation:
+    dependency: transitive
+    description:
+      name: freezed_annotation
+      sha256: "7294967ff0a6d98638e7acb774aac3af2550777accd8149c90af5b014e6d44d8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
   go_router:
     dependency: transitive
     description:
@@ -320,6 +352,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.2"
+  json_annotation:
+    dependency: transitive
+    description:
+      name: json_annotation
+      sha256: "805fa86df56383000f640384b282ce0cb8431f1a7a2396de92fb66186d8c57df"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.10.0"
   leak_tracker:
     dependency: transitive
     description:
@@ -384,6 +424,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.17.0"
+  mime:
+    dependency: transitive
+    description:
+      name: mime
+      sha256: "41a20518f0cb1256669420fdba0cd90d21561e560ac240f26ef8322e45bb7ed6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   nested:
     dependency: transitive
     description:
@@ -416,6 +464,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
+  postcode_checker:
+    dependency: "direct main"
+    description:
+      name: postcode_checker
+      sha256: "11bb386d040aecf3502fe109670bccb2c259bcc1b4b81511033f7893817c3fec"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   provider:
     dependency: "direct main"
     description:
@@ -469,6 +525,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.1"
+  stripe_android:
+    dependency: transitive
+    description:
+      name: stripe_android
+      sha256: "2bd3ad54a024701a3ef1d623c7ab81e6e8800c0586f91e4263530c47cdd19d82"
+      url: "https://pub.dev"
+    source: hosted
+    version: "12.2.0"
+  stripe_ios:
+    dependency: transitive
+    description:
+      name: stripe_ios
+      sha256: "948e2480182931c600ca07e2a132973503e9ba0f2caa8c7a94517ef861786f60"
+      url: "https://pub.dev"
+    source: hosted
+    version: "12.2.0"
+  stripe_platform_interface:
+    dependency: transitive
+    description:
+      name: stripe_platform_interface
+      sha256: "34b39cbc987b46f4d47cc0b3df2dd83994b6247c076a35ea7b1ec016959af449"
+      url: "https://pub.dev"
+    source: hosted
+    version: "12.2.0"
   term_glyph:
     dependency: transitive
     description:

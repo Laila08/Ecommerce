@@ -10,9 +10,7 @@ import 'quantity_control.dart';
 class ProductInfo extends StatelessWidget {
   final CartModel product;
 
-  const ProductInfo({
-    super.key,
-    required this.product,});
+  const ProductInfo({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {

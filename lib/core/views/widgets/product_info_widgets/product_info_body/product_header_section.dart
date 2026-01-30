@@ -13,7 +13,7 @@ class ProductHeaderSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextHeaderWidget(
       title: product.productName,
-      subTitle: "Short dress",
+      subTitle: product.productCategory,
       trailingText: "\$${product.productPrice}",
       titleStyle: AppTextStyles.font24BlackWeight400,
       subTitleStyle: AppTextStyles.font11GrayWeight400,

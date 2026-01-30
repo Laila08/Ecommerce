@@ -1,12 +1,13 @@
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:postcode_checker/postcode_checker.dart';
 
 import '../../../models/shipping_address.dart';
 import '../../../services/auth_services.dart';
 import '../../../services/checkout_services.dart';
 import '../../../theme/app_text_styles.dart';
+import 'package:meta/meta.dart';
 
 part 'shipping_address_state.dart';
 
@@ -16,17 +17,21 @@ class ShippingAddressCubit extends Cubit<ShippingAddressState> {
   final checkoutServices = CheckoutServicesImpl();
   final authServices = AuthServicesImp();
   TextStyle countryTextStyle = AppTextStyles.font14GrayWeight500;
-  void changeCountry(Country country) {
-    countryController.text = country.name;
-    countryTextStyle = AppTextStyles.font14BlackWeight400;
-    emit(CountryTextStyleChanged());
-  }
+  Country? selectedCountry;
+
   final cityController = TextEditingController();
   final addressController = TextEditingController();
   final nameController = TextEditingController();
   final regionController = TextEditingController();
   final zipCodeController = TextEditingController();
   final countryController = TextEditingController();
+
+  void changeCountry(Country country) {
+    selectedCountry = country;
+    countryController.text = country.name;
+    countryTextStyle = AppTextStyles.font14BlackWeight400;
+    emit(CountryTextStyleChanged());
+  }
 
   void clearControllers() {
     nameController.clear();
@@ -40,7 +45,6 @@ class ShippingAddressCubit extends Cubit<ShippingAddressState> {
 
   String? validateName() {
     final name = nameController.text.trim();
-
     if (name.isEmpty) {
       return "Name is required";
     }
@@ -52,7 +56,6 @@ class ShippingAddressCubit extends Cubit<ShippingAddressState> {
 
   String? validateCity() {
     final city = cityController.text.trim();
-
     if (city.isEmpty) {
       return "City is required";
     }
@@ -77,20 +80,30 @@ class ShippingAddressCubit extends Cubit<ShippingAddressState> {
   String? validateZipCode() {
     final zipCode = zipCodeController.text.trim();
 
-    if (zipCode.isEmpty) {
-      return "ZIP/Postal Code is required";
-    }
+    if (zipCode.isEmpty) return "ZIP/Postal Code is required";
+    if (selectedCountry == null) return "Please select a country first";
 
-    if (zipCode.length < 3) {
-      return "Invalid ZIP/Postal Code";
-    }
-
-    if ((zipCode.startsWith('P') || zipCode.startsWith('p')) &&
-        (zipCode.length == 3 || zipCode.length == 7)) {
+    if (selectedCountry!.countryCode.toUpperCase() == 'PS') {
+      if (!RegExp(r'^[A-Za-z0-9 ]{3,10}$').hasMatch(zipCode)) {
+        return "Invalid ZIP/Postal Code";
+      }
       return null;
     }
+    late CountryCode countryEnum;
+    try {
+      countryEnum = CountryCode.values.firstWhere(
+        (c) =>
+            c.name.toUpperCase() == selectedCountry!.countryCode.toUpperCase(),
+      );
+    } catch (e) {
+      return "Unsupported country for ZIP code validation";
+    }
 
-    return "ZIP/Postal Code should be 3 or 7 characters starting with P";
+    final result = PostcodeChecker.validate(countryEnum, zipCode);
+    if (!result.isValid)
+      return "Invalid ZIP/Postal Code for ${selectedCountry!.name}";
+
+    return null;
   }
 
   String? validateRegion() {
@@ -115,7 +128,12 @@ class ShippingAddressCubit extends Cubit<ShippingAddressState> {
   }
 
   Future<void> getShippingAddresses() async {
-    emit(ShippingAddressesLoading());
+    final previousCount = state is ShippingAddressesLoaded
+        ? (state as ShippingAddressesLoaded).shippingAddresses.length
+        : 3;
+
+    emit(ShippingAddressesLoading(shimmerCount: previousCount));
+
     try {
       final user = authServices.currentUser;
       final addresses = await checkoutServices.getShippingAddresses(user!.uid);
@@ -181,7 +199,24 @@ class ShippingAddressCubit extends Cubit<ShippingAddressState> {
   Future<void> makePreferred(ShippingAddressModel address) async {
     final user = authServices.currentUser;
     if (user == null) return;
+    final currentState = state;
+    emit(MakingPreferred(address.id));
+    if (currentState is ShippingAddressesLoaded) {
+      final updatedList = currentState.shippingAddresses.map((a) {
+        if (a.id == address.id) {
+          return a.copyWith(isDefault: true);
+        } else {
+          return a.copyWith(isDefault: false);
+        }
+      }).toList();
 
+      emit(
+        ShippingAddressesLoaded(
+          shippingAddresses: updatedList,
+          defaultAddress: address,
+        ),
+      );
+    }
     try {
       await checkoutServices.setDefaultShippingAddress(user.uid, address.id);
 
@@ -197,15 +232,15 @@ class ShippingAddressCubit extends Cubit<ShippingAddressState> {
       } else {
         defaultAddress = null;
       }
-
       emit(
         ShippingAddressesLoaded(
           shippingAddresses: updatedAddresses,
           defaultAddress: defaultAddress,
         ),
       );
+      emit(PreferredMade());
     } catch (e) {
-      emit(ShippingAddressAddingFailed(e.toString()));
+      emit(PreferredMakingFailed(e.toString()));
     }
   }
 
@@ -216,14 +251,21 @@ class ShippingAddressCubit extends Cubit<ShippingAddressState> {
     regionController.text = address.state;
     zipCodeController.text = address.zipCode;
     countryController.text = address.country;
+    try {
+      selectedCountry = Country.tryParse(address.country);
+    } catch (_) {
+      selectedCountry = null;
+    }
+    if (selectedCountry != null) {
+      countryTextStyle = AppTextStyles.font14BlackWeight400;
+      emit(CountryTextStyleChanged());
+    }
   }
 
   Future<void> updateShippingAddress(ShippingAddressModel oldAddress) async {
     emit(EditingShippingAddress());
-
     final user = authServices.currentUser;
     if (user == null) return;
-
     try {
       final updatedAddress = oldAddress.copyWith(
         fullName: nameController.text.trim(),
@@ -231,7 +273,7 @@ class ShippingAddressCubit extends Cubit<ShippingAddressState> {
         city: cityController.text.trim(),
         state: regionController.text.trim(),
         zipCode: zipCodeController.text.trim(),
-        country: countryController.text.trim(),
+        country: selectedCountry?.name ?? countryController.text.trim(),
       );
       await checkoutServices.saveShippingAddresses(user.uid, updatedAddress);
       final updatedAddresses = await checkoutServices.getShippingAddresses(
@@ -254,69 +296,4 @@ class ShippingAddressCubit extends Cubit<ShippingAddressState> {
       emit(ShippingAddressEditingFailed(e.toString()));
     }
   }
-
-  // Future<void> setShippingAddresses(
-  //   ShippingAddressModel newShippingAddress,
-  // ) async
-  // {
-  //   emit(AddingShippingAddress());
-  //   final user = authServices.currentUser;
-  //   if (user == null) return;
-  //
-  //   await checkoutServices.saveShippingAddresses(user.uid, newShippingAddress);
-  //
-  //   final updatedAddresses =
-  //   await checkoutServices.getShippingAddresses(user.uid);
-  //
-  //   bool existDefault =
-  //   updatedAddresses.any((element) => element.isDefault);
-  //
-  //   if (!existDefault && updatedAddresses.isNotEmpty) {
-  //     updatedAddresses[0] =
-  //         updatedAddresses[0].copyWith(isDefault: true);
-  //   }
-  //
-  //   final defaultAddress =
-  //   updatedAddresses.firstWhere(
-  //         (e) => e.isDefault,
-  //     orElse: () => updatedAddresses.first,
-  //   );
-  //
-  //   emit(
-  //     ShippingAddressesLoaded(
-  //       shippingAddresses: updatedAddresses,
-  //       defaultAddress: defaultAddress,
-  //     ),
-  //   );
-  //
-  //   emit(ShippingAddressAddedSuccessfully());
-  // }
-
-  // Future<void> makePreferred(ShippingAddressModel address) async {
-  //   final user = authServices.currentUser;
-  //   if (user == null) return;
-  //   final currentState = state;
-  //   if (currentState is ShippingAddressesLoaded) {
-  //     final addresses = List<ShippingAddressModel>.from(
-  //       currentState.shippingAddresses,
-  //     );
-  //     final updateDefaults = addresses
-  //         .map(
-  //           (e) => e.id == address.id
-  //               ? e.copyWith(isDefault: true)
-  //               : e.copyWith(isDefault: false),
-  //         )
-  //         .toList();
-  //     final defaultList = updateDefaults.where((e) => e.isDefault).toList();
-  //     final ShippingAddressModel? defaultAddress =
-  //     defaultList.isNotEmpty ? defaultList.first : null;
-  //
-  //     emit(
-  //       ShippingAddressesLoaded(
-  //         shippingAddresses: updateDefaults,
-  //         defaultAddress: defaultAddress,
-  //       ),
-  //     );
-  //   }
-  // }
 }

@@ -56,7 +56,7 @@ class FavoritesCategories extends StatelessWidget {
                 ],
               ),
             ).onlyPadding(leftPadding: 16),
-          ).onlyPadding(rightPadding: index+1 == catTypes.length?16:0);
+          ).onlyPadding(rightPadding: index + 1 == catTypes.length ? 16 : 0);
         },
       ),
     );

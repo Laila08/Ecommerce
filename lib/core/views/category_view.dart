@@ -24,11 +24,13 @@ class CategoryView extends StatelessWidget {
             current is HomeLoading,
         builder: (context, state) {
           if (state is HomeLoading) {
-            return const CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           }
+
           if (state is HomeFailed) {
-            return AppDialog(message: state.error);
+            return Center(child: AppDialog(message: state.error));
           }
+
           if (state is HomeSuccess) {
             return BlocProvider(
               create: (_) => CategoryCubit(
@@ -39,7 +41,8 @@ class CategoryView extends StatelessWidget {
               child: const CategoryTabs(),
             );
           }
-          return const SizedBox.shrink();
+
+          return const Center(child: Text("No data available"));
         },
       ),
     );

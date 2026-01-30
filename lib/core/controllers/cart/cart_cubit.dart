@@ -9,8 +9,8 @@ import 'package:meta/meta.dart';
 part 'cart_state.dart';
 
 class CartCubit extends Cubit<CartState> {
-  CartCubit() : super(CartInitial()){
-  listenToCart(); // 👈 هنا يبدأ الاستماع تلقائياً عند إنشاء الكوبت
+  CartCubit() : super(CartInitial()) {
+    listenToCart();
   }
   final cartServices = CartServicesImpl();
   final authServices = AuthServicesImp();
@@ -18,46 +18,32 @@ class CartCubit extends Cubit<CartState> {
   void listenToCart() {
     final user = authServices.currentUser;
     if (user == null) return;
-
-    _cartSub?.cancel(); // safety
+    _cartSub?.cancel();
     _cartSub = cartServices.cartStream(user.uid).listen((cartProducts) {
-      emit(CartISuccess(
-        cartProducts: cartProducts,
-        totalPrice: _calculateTotal(cartProducts),
-      ));
+      emit(
+        CartISuccess(
+          cartProducts: cartProducts,
+          totalPrice: _calculateTotal(cartProducts),
+        ),
+      );
     });
   }
 
   Future<void> removeFromCarts(CartModel product) async {
-    print('🟡 removeFromCarts CALLED with cartId=${product.cartId}');
-    print('🟡 current state before delete = ${state.runtimeType}');
-
     final currentState = state as CartISuccess;
     final user = authServices.currentUser;
-    print('🟡 currentUser uid = ${user?.uid}');
-
     try {
-      print('🟡 deleting from Firebase...');
       await cartServices.removeFromCarts(user!.uid, product.productId);
-      print('🟢 Firebase delete DONE');
-
       final updatedProducts = currentState.cartProducts
           .where((item) => item.cartId != product.cartId)
           .toList();
-      print('🟡 before delete length = ${currentState.cartProducts.length}');
-      print('🟢 after delete length = ${updatedProducts.length}');
-
       if (isClosed) return;
-      print('🟢 emitting CartISuccess...');
-
       emit(
         CartISuccess(
           cartProducts: updatedProducts,
           totalPrice: _calculateTotal(updatedProducts),
         ),
       );
-      print('🟢 emit DONE');
-
     } catch (e) {
       if (isClosed) return;
       emit(CartIFailed(e.toString()));
@@ -85,16 +71,13 @@ class CartCubit extends Cubit<CartState> {
 
   void addQuantity(CartModel product) {
     if (state is! CartISuccess) return;
-
     final currentState = state as CartISuccess;
-
     final updatedProducts = currentState.cartProducts.map((item) {
       if (item.cartId == product.cartId) {
         return item.copyWith(quantity: item.quantity + 1);
       }
       return item;
     }).toList();
-
     emit(
       CartISuccess(
         cartProducts: updatedProducts,
@@ -105,9 +88,7 @@ class CartCubit extends Cubit<CartState> {
 
   void oddQuantity(CartModel product) {
     if (state is! CartISuccess) return;
-
     final currentState = state as CartISuccess;
-
     final updatedProducts = currentState.cartProducts.map((item) {
       if (item.cartId == product.cartId) {
         final newQuantity = item.quantity > 1 ? item.quantity - 1 : 1;
@@ -115,7 +96,6 @@ class CartCubit extends Cubit<CartState> {
       }
       return item;
     }).toList();
-
     emit(
       CartISuccess(
         cartProducts: updatedProducts,
